@@ -1,0 +1,28 @@
+# Emacs backup files
+*~%
+
+# Extracted input data
+*.pdf
+
+# Output images
+*.png
+*.ps
+*.eps
+*.svg
+*.jpg
+*.jpeg
+
+# Raw map information
+*.xml
+*.cpg
+*.dbf
+*.prj
+*.shp
+*.shx
+
+# Other
+*.log
+*.DS_Store
+*.sublime-*
+*.egg-info
+__pycache__
