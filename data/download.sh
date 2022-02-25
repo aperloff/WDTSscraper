@@ -16,12 +16,12 @@ us_map_location="https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_state
 # --> https://catalog.data.gov/dataset?organization=ed-gov
 # --> https://catalog.data.gov/dataset?q=university&sort=views_recent+desc&organization=ed-gov&metadata_type=geospatial&as_sfid=AAAAAAVxgwGD0BppQSGW1W8qKBEZ23ZUneR7n84Ng4zHMjqPJiOqThubPZ80gfUna_LVwCWbLmcYfpZLGFuB5j3OKe78jh7hJAYj-SGhNruFavqaPNXsW5PvM4GZAw1IbIRsMO8%3D&as_fid=e0c896412e74e49c415df3d040221add0b7c1b35&ext_location=&ext_bbox=&ext_prev_extent=-141.6796875%2C8.754794702435618%2C-59.4140625%2C61.77312286453146
 postsecondary_school_locations=("https://data-nces.opendata.arcgis.com/datasets/809cc7caddf34d3692970c9a781dac03_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2015 - 16
-                                "https://data-nces.opendata.arcgis.com/datasets/72d9d1167cad4b619fa23f36f05e8766_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2016 - 17
-                                "https://data-nces.opendata.arcgis.com/datasets/adc0c93f5b004246b186e90f4b43830f_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2017 - 18
-                                "https://data-nces.opendata.arcgis.com/datasets/6aa17db388b34c6c9d6ae040993cd99d_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2018 - 19
-                                "https://data-nces.opendata.arcgis.com/datasets/6a2b95d345d8452ca527b30490096391_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2019 - 20
-                                "https://data-nces.opendata.arcgis.com/datasets/296839772bf14df29c290202f8547ff1_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2020 - 21
-                                "https://data-nces.opendata.arcgis.com/datasets/a15e8731a17a46aabc452ea607f172c0_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D") # Current
+								"https://data-nces.opendata.arcgis.com/datasets/72d9d1167cad4b619fa23f36f05e8766_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2016 - 17
+								"https://data-nces.opendata.arcgis.com/datasets/adc0c93f5b004246b186e90f4b43830f_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2017 - 18
+								"https://data-nces.opendata.arcgis.com/datasets/6aa17db388b34c6c9d6ae040993cd99d_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2018 - 19
+								"https://data-nces.opendata.arcgis.com/datasets/6a2b95d345d8452ca527b30490096391_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2019 - 20
+								"https://data-nces.opendata.arcgis.com/datasets/296839772bf14df29c290202f8547ff1_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D"  # 2020 - 21
+								"https://data-nces.opendata.arcgis.com/datasets/a15e8731a17a46aabc452ea607f172c0_0.zip?outSR=%7B%22latestWkid%22%3A4269%2C%22wkid%22%3A4269%7D") # Current
 
 postsecondary_school_filenames=("Postsecondary_School_Locations_2015-16.zip"
 								"Postsecondary_School_Locations_2016-17.zip"
@@ -100,23 +100,23 @@ else
 	echo "Uh oh! You don't have 'curl' or 'wget' available. Unable to download the input files."
 fi
 
-if [[ ! -z download_command ]]; then
+if [[ -n download_command ]]; then
 
 	# Download the US map information
 	echo -n "Downloading the US map information ... "
-	cd data/us_map/
+	cd data/us_map/ || return
 	eval "${download_command} ${us_map_location}"
 	echo "DONE"
 
 	echo -n "Extracting the US map shapefiles ... "
-	for zip_file in `ls *.zip`; do
-		unzip ${zip_file} > /dev/null
+	for zip_file in $(ls *.zip); do
+		unzip "${zip_file}" > /dev/null
 	done
 	echo "DONE"	
 
 	# Download the information about US postsecondary schools
 	echo -n "Downloading information about US postsecondary schools ... "
-	cd ../schools/
+	cd ../schools/ || return
 	for ifile in "${!postsecondary_school_locations[@]}"; do
 		dcommand="${download_command/-O/}"
 		eval "${dcommand} -o ${postsecondary_school_filenames[$ifile]} ${postsecondary_school_locations[$ifile]}"
@@ -124,45 +124,40 @@ if [[ ! -z download_command ]]; then
 	echo "DONE"
 
 	echo -n "Extracting the school information ... "
-	for zip_file in `ls *.zip`; do
-		unzip ${zip_file} > /dev/null
+	for zip_file in $(ls *.zip); do
+		unzip "${zip_file}" > /dev/null
 	done
 	echo "DONE"
 
 	# Download the list of CCI participants
 	echo -n "Downloading the list of CCI participants ... "
-	cd ../CCI/
+	cd ../CCI/ || return
 	for file in "${cci_participants[@]}"; do
-	    filename=`basename ${file}`
-	    #curl -o /opt/WDTSscraper/data/CCI/${filename} ${file}
 		eval "${download_command} ${file}"
 	done
 	echo "DONE"
 
 	# Download the list of SCGSR participants
 	echo -n "Downloading the list of SCGSR participants ... "
-	cd ../SCGSR/
+	cd ../SCGSR/ || return
 	for file in "${scgsr_participants[@]}"; do
-    	filename=`basename ${file}`
-    	eval "${download_command} ${file}"
+		eval "${download_command} ${file}"
 	done
 	echo "DONE"
 
 	# Download the list of SULI participants
 	echo -n "Downloading the list of SULI participants ... "
-	cd ../SULI/
+	cd ../SULI/ || return
 	for file in "${suli_participants[@]}"; do
-	    filename=`basename ${file}`
-	    eval "${download_command} ${file}"
+		eval "${download_command} ${file}"
 	done
 	echo "DONE"
 
 	# Download the list of VFP participants
 	echo -n "Downloading the list of VFP participants ... "
-	cd ../VFP/
+	cd ../VFP/ || return
 	for file in "${vfp_participants[@]}"; do
-	    filename=`basename ${file}`
-	    eval "${download_command} ${file}"
+		eval "${download_command} ${file}"
 	done
 	echo "DONE"
 
