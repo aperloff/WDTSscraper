@@ -1,6 +1,7 @@
 #!/bin/bash
 
-for dir in $(find data -mindepth 1 -maxdepth 1 -type d); do
+while IFS= read -r -d '' dir
+do
 	echo -n "Removing the directory ${dir} ... "
 
 	if rm -r "${dir}"; then
@@ -8,4 +9,4 @@ for dir in $(find data -mindepth 1 -maxdepth 1 -type d); do
 	else
 		echo "Unable to delete '${dir}'!"
 	fi
-done
+done <  <(find data -mindepth 1 -maxdepth 1 -type d -print0)

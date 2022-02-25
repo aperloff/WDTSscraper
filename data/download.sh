@@ -100,7 +100,7 @@ else
 	echo "Uh oh! You don't have 'curl' or 'wget' available. Unable to download the input files."
 fi
 
-if [[ -n download_command ]]; then
+if [[ -n "${download_command}" ]]; then
 
 	# Download the US map information
 	echo -n "Downloading the US map information ... "
@@ -109,7 +109,7 @@ if [[ -n download_command ]]; then
 	echo "DONE"
 
 	echo -n "Extracting the US map shapefiles ... "
-	for zip_file in $(ls *.zip); do
+	for zip_file in ./*.zip; do
 		unzip "${zip_file}" > /dev/null
 	done
 	echo "DONE"	
@@ -124,7 +124,7 @@ if [[ -n download_command ]]; then
 	echo "DONE"
 
 	echo -n "Extracting the school information ... "
-	for zip_file in $(ls *.zip); do
+	for zip_file in ./*.zip; do
 		unzip "${zip_file}" > /dev/null
 	done
 	echo "DONE"
