@@ -10,8 +10,8 @@ Table of Contents
 
 - [Installation](#installation)
 - [Command line interface](#command-line-interface)
-	- [Basic example](#basic-example)
-	- [Options](#options)
+  - [Basic example](#basic-example)
+  - [Options](#options)
 - [Dependencies](#dependencies)
 - [Acknowledgments / Contributors](#acknowledgments--contributors)
 - [Contributing](#contributing)
@@ -22,7 +22,7 @@ Table of Contents
 
 ```bash
 git clone git@github.com:aperloff/WDTSscraper.git
-./check_for_dependencies.sh # <work in progress>
+python3 python/check_for_dependencies.py
 data/download.sh # <work in progress>
 ```
 
@@ -72,7 +72,7 @@ Required dependencies:
   - `mpl_toolkits`: Should be installed when you install `matplotlib`. In other words, you shouldn't need to do anything extra.
   - [`GeoPandas`](https://geopandas.org/en/stable/index.html): This library is used to parse geographic data and to visualize it using `matplotlib`.
     - Installation instructions can be found [here](https://geopandas.org/en/stable/getting_started/install.html#installing-with-pip).
-    - **TLDR**: You can install it using the command `pip3 install --no-cache-dir numpy pandas shapely fiona pyproj rtree GeoAlchemy2 geopy mapclassify matplotlib mapclassify geopandas`
+    - **TLDR**: You can install it using the command `pip3 install --no-cache-dir numpy pandas shapely fiona pyproj rtree GeoAlchemy2 geopy mapclassify matplotlib geopandas`
 
 ## Acknowledgments / Contributors
 
