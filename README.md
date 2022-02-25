@@ -1,5 +1,7 @@
 # WDTSscraper
 
+![Tests](https://github.com/aperloff/WDTSscraper/workflows/Lint_Code/badge.svg)
+
 Scrape [US Department of Energy (DOE)](https://www.energy.gov/) [Office of Science](https://science.osti.gov/) [Workforce Development for Teachers and Scientists (WDTS)](https://science.osti.gov/wdts) produced PDF files for information about DOE run STEM pipeline programs. The information is taken from [WDTS](https://science.osti.gov/wdts), the [US Census Bureau](https://www.census.gov/), and the [US Department of Education](https://www.ed.gov/). 
 
 The currently list of STEM pipeline programs whose information can be gathered and parsed are:
