@@ -1,7 +1,8 @@
 # Emacs backup files
 *~%
 
-# Extracted input data
+# Input data
+*.zip
 *.pdf
 
 # Output images
