@@ -1,6 +1,12 @@
 # WDTSscraper
 
-Scrape [US Department of Energy (DOE)](https://www.energy.gov/) [Office of Science](https://science.osti.gov/) [Workforce Development for Teachers and Scientists (WDTS)](https://science.osti.gov/wdts) produced PDF files for information about DOE run STEM pipeline programs. The information is taken from [WDTS](https://science.osti.gov/wdts), the [US Census Bureau](https://www.census.gov/), and the [US Department of Education](https://www.ed.gov/). The currently accessible list of STEM pipeline programs can be found below.
+Scrape [US Department of Energy (DOE)](https://www.energy.gov/) [Office of Science](https://science.osti.gov/) [Workforce Development for Teachers and Scientists (WDTS)](https://science.osti.gov/wdts) produced PDF files for information about DOE run STEM pipeline programs. The information is taken from [WDTS](https://science.osti.gov/wdts), the [US Census Bureau](https://www.census.gov/), and the [US Department of Education](https://www.ed.gov/). 
+
+The currently list of STEM pipeline programs whose information can be gathered and parsed are:
+  - [Community College Internships (CCI)](https://science.osti.gov/wdts/cci)
+  - [Office of Science Graduate Student Research (SCGSR) Program](https://science.osti.gov/wdts/scgsr)
+  - [Science Undergraduate Laboratory Internships (SULI)](https://science.osti.gov/wdts/suli)
+  - [Visiting Faculty Program (VFP)](https://science.osti.gov/wdts/vfp)
 
 To report a bug or request a feature, please [file an issue](https://github.com/aperloff/WDTSscraper/issues/new/choose).
 
@@ -13,6 +19,7 @@ Table of Contents
   - [Basic example](#basic-example)
   - [Options](#options)
   - [Tools](#tools)
+- [Examples](#examples)
 - [Dependencies](#dependencies)
 - [Acknowledgments / Contributors](#acknowledgments--contributors)
 - [Contributing](#contributing)
@@ -61,6 +68,18 @@ There are two tools used for managing the input data collected from the US gover
 
   - `data/download.sh`: This is used for downloading and extracting the entire collection of needed input files. It gathers US map information from the Census Bureau, post-secondary school information from the Department of Education, and DOE program participation from WDTS.
   - `data/clean.sh`: This will remove all sub-directories within the `data/` directory. This effectively wipes the slate clean. Make sure not to store any valuable files within these sub-directories.
+
+## Examples
+
+Here are some examples of the types of images which can be created.
+
+The first one displays the DOE national laboratories involved in the VFP, the home institutions for the faculty and students involved, and the connections between those home institutions and the national laboratories. The plot covers from 2015 to 2021 and includes all research areas.
+
+![VFP connections 2015-2021](examples/VFP_2015-2021.png "VFP connections 2015-2021")
+
+The second image shows the DOE national laboratories and home institutions involved in the CCI, SCGSR, SULI, and VFP programs, but only for students and faculty verifiably involved in high energy physics (HEP) research. Because there was no information about the type of research being done by CCI participants, there are no makers on the plot for that programs. Once again this plot covers from 2015 to 2021.
+
+![HEP pipeline programs 2015-2021](examples/CCI_SCGSR_SULI_VFP_2015-2021_HEPOnly_Strict.png "HEP pipeline programs 2015-2021")
 
 ## Dependencies
 
