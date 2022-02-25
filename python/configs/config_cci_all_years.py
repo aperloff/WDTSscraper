@@ -1,3 +1,10 @@
+#!/bin/env python3
+
+"""A magicconfig file used to define a set of options used by the WDTSscraper module.
+
+This specific configuration specifies that only the data for the CCI program should be used for the years 2015-2021.
+"""
+
 from magiconfig import MagiConfig
 
 config = MagiConfig()

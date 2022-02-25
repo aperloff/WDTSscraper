@@ -1,6 +1,11 @@
-from,
-magiconfig,
-import MagiConfig
+#!/bin/env python3
+
+"""A magicconfig file used to define a set of options used by the WDTSscraper module.
+
+This specific configuration specifies that only the data for the VFP program should be used for the years 2015-2021.
+"""
+
+from magiconfig import MagiConfig
 
 config = MagiConfig()
 config.files = [
@@ -52,7 +57,3 @@ config.no_lines = False
 config.filter_by_topic = False
 config.strict_filtering = False
 config.debug = False
-
-
-
-

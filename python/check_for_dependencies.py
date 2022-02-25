@@ -1,78 +1,159 @@
 #!/bin/env python3
 
+"""This program checks that the needed dependencies are installed on the host machine. It will check dependencies
+installed explicitly by pip, those which are bundled with other programs (not explicitly tracked by pip), and
+some system dependencies.
+
+Attributes
+----------
+pip_dependencies : dict
+    a set of pip tracked dependencies and some associated dependencies
+try_dependencies : list
+    a list of dependencies not explicitly tracked by pip, but which are nevertheless used by WDTSscraper.py
+system_dependencies : list
+    a list of system-level, non-python dependencies which are needed for some of the other modules to work
+
+Functions
+---------
+is_tool(name)
+    Checks if `name` is within PATH and is marked as executable
+check_for_dependencies()
+    Runs the checks for all of the dependencies
+"""
+
 import importlib
-import pkg_resources
 from shutil import which
+import pkg_resources
 
 pip_dependencies = {
-	"pdfplumber" : [],
-	"magiconfig" : [],
-	"matplotlib" : [],
-	"geopandas" : ["numpy", "pandas","shapely", "fiona", "pyproj", "rtree", "geoalchemy2", "geopy", "mapclassify", "matplotlib"],
+    "pdfplumber" : [],
+    "magiconfig" : [],
+    "matplotlib" : [],
+    "geopandas" : ["numpy", "pandas","shapely", "fiona", "pyproj", "rtree", "geoalchemy2", "geopy", "mapclassify", "matplotlib"],
 }
 try_dependencies = ["mpl_toolkits"]
 system_dependencies = ["convert", "gs"] # 'convert' installed by ImageMagick
 
 def is_tool(name):
-	"""
-	Check whether `name` is on PATH and marked as executable.
+    """Check whether `name` is on PATH and marked as executable.
 
-	Suggested from: https://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
-	"""
-	return which(name) is not None
+    Suggested from: https://stackoverflow.com/questions/11210104/check-if-a-program-exists-from-a-python-script
+    """
+    return which(name) is not None
+
+def check_pip_dependencies(dependency_dict):
+    """Checks for the pip-installed dependencies.
+
+    Parameters
+    ----------
+    dependency_dict : dict
+        The keys of the dictionary contain the major dependencies and the values contain a list of the sub-dependencies
+
+    Returns
+    -------
+    missing
+        A list of the missing packages
+    """
+
+    # pylint: disable=E1133
+    installed_packages = pkg_resources.working_set
+    installed_packages_list = sorted([f"{i.key}" for i in installed_packages])
+
+    missing = []
+    for dependency, subdependencies in dependency_dict.items():
+        print(f"Checking for {dependency} ... ", end="")
+        if dependency not in installed_packages_list:
+            missing.append(dependency)
+            print("MISSING")
+        else:
+            print("FOUND")
+
+        for subdependency in subdependencies:
+            print(f"\tChecking for {subdependency} ... ", end="")
+            if subdependency not in installed_packages_list:
+                missing.append(subdependency)
+                print("MISSING")
+            else:
+                print("FOUND")
+    return missing
+
+def check_try_dependencies(dependency_list):
+    """Checks for the python dependencies not tracked by pip.
+
+    Parameters
+    ----------
+    dependency_list : list
+        The list of modules to try to import to see if they are installed
+
+    Returns
+    -------
+    missing
+        A list of the missing modules
+    """
+
+    missing = []
+    for dependency in dependency_list:
+        print(f"Checking for {dependency} ... ", end="")
+        try:
+            importlib.import_module(dependency)
+        except ImportError:
+            missing.append(dependency)
+            print("MISSING")
+        else:
+            print("FOUND")
+    return missing
+
+def check_system_dependencies(dependency_list):
+    """Checks for the system dependencies.
+
+    Parameters
+    ----------
+    dependency_list : list
+        The list of modules to look for
+
+    Returns
+    -------
+    missing
+        A list of the missing modules
+    """
+
+    missing = []
+    for dependency in dependency_list:
+        print(f"Checking for {dependency} ... ", end="")
+        if not is_tool(dependency):
+            missing.append(dependency)
+            print("MISSING")
+        else:
+            print("FOUND")
+    return missing
 
 def check_for_dependencies():
-	"""
-	Suggested from: https://www.activestate.com/resources/quick-reads/how-to-list-installed-python-packages/
-	"""
-	installed_packages = pkg_resources.working_set
-	installed_packages_versions_list = sorted([f"{i.key}=={i.version}" for i in installed_packages])
-	installed_packages_list = sorted([f"{i.key}" for i in installed_packages])
+    """Checks whether or not the dependencies are installed
 
-	missing_pip = []
-	for dependency, subdependencies in pip_dependencies.items():
-		print(f"Checking for {dependency} ... ", end="")
-		if dependency not in installed_packages_list:
-			missing_pip.append(dependency)
-			print("MISSING")
-		else:
-			print("FOUND")
+    Raises
+    ------
+    ModuleNotFoundError
+        If the number of missing packages isn't zero
 
-		for subdependency in subdependencies:
-			print(f"\tChecking for {subdependency} ... ", end="")
-			if subdependency not in installed_packages_list:
-				missing_pip.append(subdependency)
-				print("MISSING")
-			else:
-				print("FOUND")
+    Returns
+    -------
+    n_missing
+        The number of missing packages
 
-	missing_import = []
-	for dependency in try_dependencies:
-		print(f"Checking for {dependency} ... ", end="")
-		try:
-			importlib.import_module(dependency)
-		except ImportError:
-			missing_import.append(dependency)
-			print("MISSING")
-		else:
-			print("FOUND")
+    Suggested from: https://www.activestate.com/resources/quick-reads/how-to-list-installed-python-packages/
+    """
 
-	missing_system = []
-	for dependency in system_dependencies:
-		print(f"Checking for {dependency} ... ", end="")
-		if not is_tool(dependency):
-			missing_system.append(dependency)
-			print("MISSING")
-		else:
-			print("FOUND")
+    missing_pip = check_pip_dependencies(pip_dependencies)
+    missing_import = check_try_dependencies(try_dependencies)
+    missing_system = check_system_dependencies(system_dependencies)
 
-	n_missing = len(missing_pip) + len(missing_import) + len(missing_system)
-	if n_missing > 0:
-		raise ModuleNotFoundError("There are missing dependencies!")
-	else:
-		print("\nAll dependencies installed!")
+    n_missing = len(missing_pip) + len(missing_import) + len(missing_system)
+    if n_missing > 0:
+        raise ModuleNotFoundError("There are missing dependencies!")
 
-	return n_missing
+    print("\nAll dependencies installed!")
+
+    return n_missing
 
 if __name__ == "__main__":
-	check_for_dependencies()
+    check_for_dependencies()

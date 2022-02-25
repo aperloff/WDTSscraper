@@ -1,3 +1,10 @@
+#!/bin/env python3
+
+"""A magicconfig file used to define a set of options used by the WDTSscraper module.
+
+This specific configuration specifies that all of the known programs and years should be used.
+"""
+
 from magiconfig import MagiConfig
 
 config = MagiConfig()

@@ -1,21 +1,24 @@
 #!/bin/env python3
 
+"""This program DOCSTRING
+"""
+
 from argparse import RawTextHelpFormatter
 from datetime import date
 from enum import Enum
+import operator
+import os
+import sys
+
 import geopandas as gpd
 from magiconfig import ArgumentParser, MagiConfigOptions
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
-from mpl_toolkits.axes_grid1.inset_locator import InsetPosition
 import numpy as np
-import operator
-import os
 import pandas as pd
 import pdfplumber
-from shapely.geometry import Point, Polygon
-import sys
 
+# pylint: disable=C0301
 home_institution_replacements = {
     "The Ohio State University Main Campus" : "Ohio State University-Main Campus",
     "State University of New York College at Buffalo" : "University at Buffalo",
@@ -187,6 +190,7 @@ home_institution_replacements = {
     "Northampton Community College" : "Northampton County Area Community College",
     "City University of New York Herbert H. Lehman College" : "CUNY Lehman College",
 }
+# pylint: enable=C0301
 
 class ExtendedEnum(Enum):
     """From: https://stackoverflow.com/questions/29503339/how-to-get-all-values-from-python-enum-class"""
@@ -211,6 +215,7 @@ class Institution:
         return f"Institution({self.name})"
 
 class Jobs(ExtendedEnum):
+    # pylint: disable=C0103
     Faculty = "Faculty"
     Student = "Student"
     Unknown = "Unknown"
@@ -236,48 +241,50 @@ class Laboratories(ExtendedEnum):
     https://www.findlatitudeandlongitude.com/find-latitude-and-longitude-from-address/
     https://www.latlong.net/
     """
-    AMES                                           = Laboratory("Ames National Laboratory", "AMES", "Ames", "IA", 42.02997, -93.648319)
-    Ames_National_Laboratory                       = AMES
-    ANL                                            = Laboratory("Argonne National Laboratory", "ANL", "Argonne", "IL", 37.037853, -95.821369)
-    Argonne_National_Laboratory                    = ANL
-    BNL                                            = Laboratory("Brookhaven National Laboratory", "BNL", "Upton", "NY", 40.880610, -72.864810)
-    Brookhaven_National_Laboratory                 = BNL
-    DNR                                            = Laboratory("NNSA Naval Reactors Program", "DNR", "Idaho Falls", "ID", 43.54446097491455, -112.03437145614816)
-    DOE_Naval_Reactors                             = DNR
-    NNSA_Naval_Reactors_Program                    = DNR
-    FNAL                                           = Laboratory("Fermi National Accelerator Laboratory", "FNAL", "Batavia", "IL", 41.845584, -88.230627)
-    Fermi_National_Accelerator_Laboratory          = FNAL
-    GA_DIII_D                                      = Laboratory("General Atomics DIII-D Research Program", "GA/DIII-D", "San Diego", "CA", 32.893898258647575, -117.23595545378129)
-    General_Atomics_DIII_D                         = GA_DIII_D
-    INL                                            = Laboratory("Idaho National Laboratory", "INL", "Idaho Falls", "ID", 43.520832, -112.049069)
-    Idaho_National_Laboratory                      = INL
-    LBNL                                           = Laboratory("Lawrence Berkeley National Laboratory", "LBNL", "Berkeley", "CA", 37.875928, -122.250027)
-    Lawrence_Berkeley_National_Laboratory          = LBNL
-    LLNL                                           = Laboratory("Lawrence Livermore National Laboratory", "LLNL", "Livermore", "CA", 37.689684, -121.706508)
-    Lawrence_Livermore_National_Laboratory         = LLNL
-    LANL                                           = Laboratory("Los Alamos National Laboratory", "LANL", "Los Alamos", "NM", 35.823204, -106.315255)
-    Los_Alamos_National_Laboratory                 = LANL
-    NREL                                           = Laboratory("National Renewable Energy Laboratory", "NREL", "Golden", "CO", 39.740555, -105.167442)
-    National_Renewable_Energy_Laboratory           = NREL
-    NETL                                           = Laboratory("National Energy Technology Laboratory", "NETL", "Pittsburgh", "PA", 44.623157, -123.120658)
-    National_Energy_Technology_Laboratory          = NETL
-    ORNL                                           = Laboratory("Oak Ridge National Laboratory", "ORNL", "Oak Ridge", "TN", 35.930065, -84.3124)
-    Oak_Ridge_National_Laboratory                  = ORNL
-    PNNL                                           = Laboratory("Pacific Northwest National Laboratory", "PNNL", "Richland", "WA", 48.624371, -122.414436)
-    Pacific_Northwest_National_Laboratory          = PNNL
-    PPPL                                           = Laboratory("Princeton Plasma Physics Laboratory", "PPPL", "Princeton", "NJ", 40.35017000292229, -74.60301244421065)
-    Princeton_Plasma_Physics_Laboratory            = PPPL
-    SNL_CA                                         = Laboratory("Sandia National Laboratories", "SNL CA", "Livermore", "CA", 37.67632034546966, -121.70583626387636)
-    Sandia_National_Laboratories_CA                = SNL_CA
-    Sandia_National_Laboratory_CA                  = SNL_CA
-    SNL_NM                                         = Laboratory("Sandia National Laboratories", "SNL NM", "Albuquerque", "NM", 35.06081338310055, -106.5346557138103)
-    Sandia_National_Laboratories_NM                = SNL_NM
-    Sandia_National_Laboratory_NM                  = SNL_NM
-    SRNL                                           = Laboratory("Savannah River National Laboratory", "SRNL", "Aiken", "SC", 33.34290917466783, -81.7378274597186)
-    Savannah_River_National_Laboratory             = SRNL
-    SLAC                                           = Laboratory("SLAC National Accelerator Laboratory", "SLAC", "Menlo Park", "CA", 37.420121, -122.205991)
-    SLAC_National_Accelerator_Laboratory           = SLAC
-    TJNAF                                          = Laboratory("Thomas Jefferson National Accelerator Facility", "TJNAF", "Newport News", "VA", 37.098362, -76.482427)
+
+    # pylint: disable=C0103
+    AMES = Laboratory("Ames National Laboratory","AMES","Ames","IA",42.02997,-93.648319)
+    Ames_National_Laboratory = AMES
+    ANL = Laboratory("Argonne National Laboratory","ANL","Argonne","IL",37.037853,-95.821369)
+    Argonne_National_Laboratory = ANL
+    BNL = Laboratory("Brookhaven National Laboratory","BNL","Upton","NY",40.880610,-72.864810)
+    Brookhaven_National_Laboratory = BNL
+    DNR = Laboratory("NNSA Naval Reactors Program","DNR","Idaho Falls","ID",43.54446097491455,-112.03437145614816)
+    DOE_Naval_Reactors = DNR
+    NNSA_Naval_Reactors_Program = DNR
+    FNAL = Laboratory("Fermi National Accelerator Laboratory","FNAL","Batavia","IL",41.845584,-88.230627)
+    Fermi_National_Accelerator_Laboratory = FNAL
+    GA_DIII_D = Laboratory("General Atomics DIII-D Research Program","GA/DIII-D","San Diego","CA",32.893898258647575,-117.23595545378129)
+    General_Atomics_DIII_D = GA_DIII_D
+    INL = Laboratory("Idaho National Laboratory","INL","Idaho Falls","ID",43.520832,-112.049069)
+    Idaho_National_Laboratory = INL
+    LBNL = Laboratory("Lawrence Berkeley National Laboratory","LBNL","Berkeley","CA",37.875928,-122.250027)
+    Lawrence_Berkeley_National_Laboratory = LBNL
+    LLNL = Laboratory("Lawrence Livermore National Laboratory","LLNL","Livermore","CA",37.689684,-121.706508)
+    Lawrence_Livermore_National_Laboratory = LLNL
+    LANL = Laboratory("Los Alamos National Laboratory","LANL","Los Alamos","NM",35.823204,-106.315255)
+    Los_Alamos_National_Laboratory = LANL
+    NREL = Laboratory("National Renewable Energy Laboratory","NREL","Golden","CO",39.740555,-105.167442)
+    National_Renewable_Energy_Laboratory = NREL
+    NETL = Laboratory("National Energy Technology Laboratory","NETL","Pittsburgh","PA",44.623157,-123.120658)
+    National_Energy_Technology_Laboratory = NETL
+    ORNL = Laboratory("Oak Ridge National Laboratory","ORNL","Oak Ridge","TN",35.930065,-84.3124)
+    Oak_Ridge_National_Laboratory = ORNL
+    PNNL = Laboratory("Pacific Northwest National Laboratory","PNNL","Richland","WA",48.624371,-122.414436)
+    Pacific_Northwest_National_Laboratory = PNNL
+    PPPL = Laboratory("Princeton Plasma Physics Laboratory","PPPL","Princeton","NJ",40.35017000292229,-74.60301244421065)
+    Princeton_Plasma_Physics_Laboratory = PPPL
+    SNL_CA = Laboratory("Sandia National Laboratories","SNL CA","Livermore","CA",37.67632034546966,-121.70583626387636)
+    Sandia_National_Laboratories_CA = SNL_CA
+    Sandia_National_Laboratory_CA = SNL_CA
+    SNL_NM = Laboratory("Sandia National Laboratories","SNL NM","Albuquerque","NM",35.06081338310055,-106.5346557138103)
+    Sandia_National_Laboratories_NM = SNL_NM
+    Sandia_National_Laboratory_NM = SNL_NM
+    SRNL = Laboratory("Savannah River National Laboratory","SRNL","Aiken","SC",33.34290917466783,-81.7378274597186)
+    Savannah_River_National_Laboratory = SRNL
+    SLAC = Laboratory("SLAC National Accelerator Laboratory","SLAC","Menlo Park","CA",37.420121,-122.205991)
+    SLAC_National_Accelerator_Laboratory = SLAC
+    TJNAF = Laboratory("Thomas Jefferson National Accelerator Facility","TJNAF","Newport News","VA",37.098362,-76.482427)
     Thomas_Jefferson_National_Accelerator_Facility = TJNAF
 
     def __repr__(self):
@@ -297,7 +304,10 @@ class Person:
         self.year = year
 
     def __repr__(self):
-        return f"Person({self.program} | {self.job} | {self.participant()} | {self.home_institution} | {self.host_doe_laboratory.__repr__()} | {self.topic} | {self.year})"
+        return (
+            f"Person({self.program} | {self.job} | {self.participant()} | {self.home_institution} | "
+            f"{self.host_doe_laboratory.__repr__()} | {self.topic} | {self.year})"
+        )
 
     def participant(self):
         return f"{self.last_name}, {self.first_name}"
@@ -305,22 +315,33 @@ class Person:
 def append_institutions(schools, year, inst_name):
     df2 = pd.DataFrame(
         {
-            inst_name : ["Woods Hole Oceanographic Institution", "Arts et Metiers ParisTech", "University of Canterbury", "McGill University",
-                         "Trinity College Dublin", "Wilfrid Laurier University", "University of Melbourne", "University of Oxford", "Imperial College London",
-                         "National Tsing Hua University", "University of Toronto", "Pensacola Christian College", "University of Durham", "University of British Columbia",
-                         "Universidad de Antioquia", "University of Padua"],
-            "CITY" : ["Falmouth", "Paris", "Christchurch", "Montreal", "Dublin", "Waterloo", "Melbourne", "Oxford", "London", "Hsinchu City", "Toronto", "Pensacola", "Durham", "Vancouver",
-                      "Antioquia", "Padova PD"],
-            "STABBR" if year == 2015 else "STATE" : ["MA", "France", "New Zealand", "Canada", "Ireland", "Canada", "Australia", "United Kingdom", "United Kingdom",
-                                                     "Taiwan", "Canada", "FL", "United Kingdom", "Canada", "Colombia", "Italy"],
-            "LAT1516" if year == 2015 else "LAT" : [41.524781001932716, 48.833508810585855, -43.52243692283857, 45.50543135620449,
-                                                    53.34434434753582, 43.474536145835756, -37.798583273349905, 51.75540084373608, 51.49896243904694,
-                                                    24.796345696985465, 43.661591621428244, 30.473591759462174, 54.765146814889256, 49.260822236130316,
-                                                    6.2689002766401485, 45.40693922363649],
-            "LON1516" if year == 2015 else "LON" : [-70.6711607, 2.358395261383819, 172.5800791301893, -73.57646445446471,
-                                                    -6.254485769308092, -80.5273405693174, 144.96136023807165, -1.2540234772696208, -0.174830586222553,
-                                                    120.99670208429329, -79.39612346136519, -87.23406222329352, -1.5780956131069162, -123.24589724211424,
-                                                    -75.56872258272178, 11.877499842431922],
+            inst_name : [
+                "Woods Hole Oceanographic Institution", "Arts et Metiers ParisTech", "University of Canterbury", "McGill University",
+                "Trinity College Dublin", "Wilfrid Laurier University", "University of Melbourne", "University of Oxford",
+                "Imperial College London", "National Tsing Hua University", "University of Toronto", "Pensacola Christian College",
+                "University of Durham", "University of British Columbia",
+                "Universidad de Antioquia", "University of Padua"
+            ],
+            "CITY" : [
+                "Falmouth", "Paris", "Christchurch", "Montreal", "Dublin", "Waterloo", "Melbourne", "Oxford", "London", "Hsinchu City",
+                "Toronto", "Pensacola", "Durham", "Vancouver", "Antioquia", "Padova PD"
+            ],
+            "STABBR" if year == 2015 else "STATE" : [
+                "MA", "France", "New Zealand", "Canada", "Ireland", "Canada", "Australia", "United Kingdom", "United Kingdom",
+                 "Taiwan", "Canada", "FL", "United Kingdom", "Canada", "Colombia", "Italy"
+            ],
+            "LAT1516" if year == 2015 else "LAT" : [
+                41.524781001932716, 48.833508810585855, -43.52243692283857, 45.50543135620449,
+                53.34434434753582, 43.474536145835756, -37.798583273349905, 51.75540084373608, 51.49896243904694,
+                24.796345696985465, 43.661591621428244, 30.473591759462174, 54.765146814889256, 49.260822236130316,
+                6.2689002766401485, 45.40693922363649
+            ],
+            "LON1516" if year == 2015 else "LON" : [
+                -70.6711607, 2.358395261383819, 172.5800791301893, -73.57646445446471,
+                -6.254485769308092, -80.5273405693174, 144.96136023807165, -1.2540234772696208, -0.174830586222553,
+                120.99670208429329, -79.39612346136519, -87.23406222329352, -1.5780956131069162, -123.24589724211424,
+                -75.56872258272178, 11.877499842431922
+            ],
         },
     )
     schools = pd.concat([schools, df2], ignore_index = True, axis = 0)
@@ -359,15 +380,15 @@ def handle_known_issues_parsing_input(lines, year, debug = False):
         elif year == 2020 and "Teutu Talla Serges Love" in line[0]:
             tmp = [" ".join(line[0].split()[0:2])] + [" ".join(line[0].split()[2:4])] + [" ".join(line[0].split()[4:])] + [line[1]]
         elif year == 2020 and (len(line[0].split()) > 1 or len(line[1].split()) > 1):
-            for l in line:
-                tmp += l.split()
+            for line_part in line:
+                tmp += line_part.split()
             if tmp[0] == "De":
                 tmp = [" ".join(tmp[0:2])] + tmp[2:]
             tmp = tmp[0:2] + [" ".join(tmp[2:-1] if tmp[-2] != "SNL" else tmp[2:-2])] + ([tmp[-1]] if tmp[-2] != "SNL" else tmp[-2:])
         elif year == 2020 and len(line) == 3 and any(l in line[2] for l in Laboratories.list_names()):
             inst_lab = line[2].split()
-            tmp = line[0:2] + [" ".join(inst_lab[0:-1] if inst_lab[-2] != "SNL" else inst_lab[0:-2])] + ([inst_lab[-1]] if inst_lab[-2] != "SNL" else inst_lab[-2:])
-
+            tmp = line[0:2] + [" ".join(inst_lab[0:-1] if inst_lab[-2] != "SNL" else inst_lab[0:-2])] + \
+                  ([inst_lab[-1]] if inst_lab[-2] != "SNL" else inst_lab[-2:])
 
         if len(tmp) > 0:
             if debug:
@@ -379,7 +400,7 @@ def handle_known_issues_parsing_input(lines, year, debug = False):
 def get_institution(schools, home_institution, year, debug = False):
     if debug:
         print(f"Getting the home institution details for {home_institution} ... ", end="")
-    
+
     inst_name = "INSTNM" if year < 2017 else "NAME"
 
     # fix a known parsing error (probably a unicode error)
@@ -487,7 +508,7 @@ def load_schools(year):
     # load the database for the home institutions
     schools = None
     if year == 2021:
-        schools = gpd.read_file(f"data/schools/EDGE_GEOCODE_POSTSECONDARYSCH_CURRENT.shp")
+        schools = gpd.read_file("data/schools/EDGE_GEOCODE_POSTSECONDARYSCH_CURRENT.shp")
     else:
         schools = gpd.read_file(f"data/schools/Postsecondary_School_Locations_{year}-{year - 1999}.shp")
     return schools
@@ -496,6 +517,8 @@ def hanging_line(point1, point2):
     """
     https://stackoverflow.com/questions/30008322/draw-a-curve-connecting-two-points-instead-of-a-straight-line
     """
+
+    #pylint: disable=C0103
     a = (point2[1] - point1[1])/(np.cosh(point2[0]) - np.cosh(point1[0]))
     b = point1[1] - a*np.cosh(point1[0])
     x = np.linspace(point1[0], point2[0], 100)
@@ -511,7 +534,7 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
     #usa.loc[2, ['NAME','geometry']]
     #map = usa.plot()
     #usa[usa.NAME == "California"].plot()
-    
+
     # matplotlib colors - https://matplotlib.org/stable/gallery/color/named_colors.html
     # Data - https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
     # Basic plotting - https://stackoverflow.com/questions/39742305/how-to-use-basemap-python-to-plot-us-with-50-states
@@ -558,7 +581,18 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
 
     # start keeping track of the legend items
     legend_artists = []
-    legend_artists.append(mlines.Line2D([], [], color='red', marker = "*", markersize=12, linestyle = None, linewidth = 0, label='DOE Laboratory'))
+    legend_artists.append(
+        mlines.Line2D(
+            [],
+            [],
+            color='red',
+            marker = "*",
+            markersize=12,
+            linestyle = None,
+            linewidth = 0,
+            label='DOE Laboratory'
+        )
+    )
 
     # get the university markers
     if lines:
@@ -579,27 +613,44 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
         inst_gdf.plot(ax = hawaii_ax, color = 'blue')
         inst_gdf.plot(ax = puerto_rico_ax, color = 'blue')
 
-        legend_artists.append(mlines.Line2D([], [], color='blue', marker = ".", markersize=12, linestyle = None, linewidth = 0, label='Home Institution'))
+        legend_artists.append(
+            mlines.Line2D(
+                [],
+                [],
+                color='blue',
+                marker = ".",
+                markersize=12,
+                linestyle = None,
+                linewidth = 0,
+                label='Home Institution'
+            )
+        )
     else:
         # define a set of markers
         markers = ["o", "v", "^", "s", "p", "P", "D", "d", "X","*"]
-        colors = ["lightskyblue", "deepskyblue", "cornflowerblue", "dodgerblue", "royalblue", "blue", "mediumblue", "darkblue", "navy", "midnightblue"]
+        colors = [
+            "lightskyblue", "deepskyblue", "cornflowerblue", "dodgerblue", "royalblue",
+            "blue", "mediumblue", "darkblue", "navy", "midnightblue",
+        ]
 
         # get the set of programs from list of people
         programs = set()
         for person in person_data:
             programs.add(person.program)
-        
+
         if debug:
             print(programs)
-        
+
         # loop over the programs and draw each on separately
         for iprogram, program in enumerate(sorted(programs)):
             inst_df = pd.DataFrame(
                 {
-                    'Inst': [person.home_institution.name for person in person_data if person.home_institution is not None and person.program == program],
-                    'Latitude': [person.home_institution.latitude for person in person_data if person.home_institution is not None and person.program == program],
-                    'Longitude': [person.home_institution.longitude for person in person_data if person.home_institution is not None and person.program == program],
+                    'Inst': [person.home_institution.name for person in person_data \
+                             if person.home_institution is not None and person.program == program],
+                    'Latitude': [person.home_institution.latitude for person in person_data \
+                                 if person.home_institution is not None and person.program == program],
+                    'Longitude': [person.home_institution.longitude for person in person_data \
+                                  if person.home_institution is not None and person.program == program],
                 }
             )
             inst_gdf = gpd.GeoDataFrame(
@@ -612,7 +663,18 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
             inst_gdf.plot(ax = hawaii_ax, color = colors[iprogram], marker = markers[iprogram])
             inst_gdf.plot(ax = puerto_rico_ax, color = colors[iprogram], marker = markers[iprogram])
 
-            legend_artists.append(mlines.Line2D([], [], color = colors[iprogram], marker = markers[iprogram], markersize=12, linestyle = None, linewidth = 0, label = f'Home Institution ({program})'))
+            legend_artists.append(
+                mlines.Line2D(
+                    [],
+                    [],
+                    color = colors[iprogram],
+                    marker = markers[iprogram],
+                    markersize=12,
+                    linestyle = None,
+                    linewidth = 0,
+                    label = f'Home Institution ({program})'
+                )
+            )
 
     # get the laboratory markers
     lab_df = pd.DataFrame(
@@ -642,10 +704,34 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
             start_location = [person.home_institution.longitude, person.home_institution.latitude]
             end_location = [person.host_doe_laboratory.value.longitude, person.host_doe_laboratory.value.latitude]
             x, y = hanging_line(start_location, end_location)
-            continental_ax.plot(x, y, linewidth = 1 if person.job == Jobs.Student else 2, linestyle = "--" if person.job == Jobs.Student else "-", color = "yellow" if person.job == Jobs.Student else "orange")
-            alaska_ax.plot(x, y, linewidth = 1 if person.job == Jobs.Student else 2, linestyle = "--" if person.job == Jobs.Student else "-", color = "yellow" if person.job == Jobs.Student else "orange")
-            hawaii_ax.plot(x, y, linewidth = 1 if person.job == Jobs.Student else 2, linestyle = "--" if person.job == Jobs.Student else "-", color = "yellow" if person.job == Jobs.Student else "orange")
-            puerto_rico_ax.plot(x, y, linewidth = 1 if person.job == Jobs.Student else 2, linestyle = "--" if person.job == Jobs.Student else "-", color = "yellow" if person.job == Jobs.Student else "orange")
+            continental_ax.plot(
+                x,
+                y,
+                linewidth = 1 if person.job == Jobs.Student else 2,
+                linestyle = "--" if person.job == Jobs.Student else "-",
+                color = "yellow" if person.job == Jobs.Student else "orange"
+            )
+            alaska_ax.plot(
+                x,
+                y,
+                linewidth = 1 if person.job == Jobs.Student else 2,
+                linestyle = "--" if person.job == Jobs.Student else "-",
+                color = "yellow" if person.job == Jobs.Student else "orange"
+            )
+            hawaii_ax.plot(
+                x,
+                y,
+                linewidth = 1 if person.job == Jobs.Student else 2,
+                linestyle = "--" if person.job == Jobs.Student else "-",
+                color = "yellow" if person.job == Jobs.Student else "orange"
+            )
+            puerto_rico_ax.plot(
+                x,
+                y,
+                linewidth = 1 if person.job == Jobs.Student else 2,
+                linestyle = "--" if person.job == Jobs.Student else "-",
+                color = "yellow" if person.job == Jobs.Student else "orange"
+            )
 
     # Add a legend
     continental_ax.legend(handles=legend_artists, prop={'size': 16}, facecolor='Grey', loc='upper right')
@@ -663,12 +749,12 @@ def plot_map(debug = False, formats = None, lines = True, output_path = "./", pe
 
     # Save the figure
     if formats is not None:
-        for format in formats:
+        for fmt in formats:
             output_filename = f"{output_path}/{date.today().strftime('%Y_%m_%d')}_map"
             i = 0
-            while os.path.exists(f"{output_filename}_v{i}.{format}"):
+            while os.path.exists(f"{output_filename}_v{i}.{fmt}"):
                 i += 1
-            output_filename = f"{output_filename}_v{i}.{format}"
+            output_filename = f"{output_filename}_v{i}.{fmt}"
             plt.savefig(output_filename, bbox_inches='tight')
 
     if show:
@@ -690,15 +776,18 @@ def process_file_table_no_lines_program_lastfirstname_institution_laboratory_top
             split_lines_no_blanks = split_lines_no_blanks[3:]
         split_lines_no_blanks = [[item.replace("\xa0", " ").strip() for item in line] for line in split_lines_no_blanks]
         good_lines = handle_known_issues_parsing_input(split_lines_no_blanks, year)
-        good_vfp_lines = [line for line in good_lines if any(filter in line[0] for filter in program_filter)] if program_filter is not None else good_lines
+        good_vfp_lines = [line for line in good_lines if any(filter in line[0] for filter in program_filter)] \
+                         if program_filter is not None else good_lines
         if len(good_vfp_lines) == 0:
             continue
         people += [Person(program = line[0].split()[0] if " " in line[0] else line[0],
-                          job = Jobs[line[0].split()[1] if " " in line[0] else "Student" if any(i in line[0] for i in ["SULI", "CCI"]) else "Unknown"],
+                          job = Jobs[line[0].split()[1] if " " in line[0] else "Student" \
+                                     if any(i in line[0] for i in ["SULI", "CCI"]) else "Unknown"],
                           first_name = line[1].split(",")[1],
                           last_name = line[1].split(",")[0],
                           home_institution = get_institution(schools, line[2], year, debug = debug),
-                          host_doe_laboratory = Laboratories["GA_DIII_D"] if "General Atomics" in line[3] else Laboratories[line[3][line[3].find("(") + 1 : line[3].rfind(")")].replace(" ", "_")],
+                          host_doe_laboratory = Laboratories["GA_DIII_D"] if "General Atomics" in line[3] \
+                                                else Laboratories[line[3][line[3].find("(") + 1 : line[3].rfind(")")].replace(" ", "_")],
                           topic = line[4],
                           year = year) if len(line) == 5 else print("ERROR::" + str(line)) for line in good_vfp_lines]
 
@@ -794,7 +883,7 @@ def process_file_table_with_lines_name_institution_laboratory_term(filename, yea
         for row in table:
             # Check for blank rows
             if all(not r for r in row):
-                continue;
+                continue
 
             # Find the laboratory information
             lab = ""
@@ -803,10 +892,10 @@ def process_file_table_with_lines_name_institution_laboratory_term(filename, yea
             else:
                 lab = row[2].replace(" ", "_").replace("\n", "")
             if any(l in lab for l in ["SNL", "Sandia"]):
-                lab += "_CA" if any(w in row[1] for w in ["California","Mills"]) else "_NM" 
+                lab += "_CA" if any(w in row[1] for w in ["California","Mills"]) else "_NM"
             if any(n in lab for n in ["General Atomics", "General_Atomics","General\xa0Atomics"]):
                 lab = "General_Atomics_DIII_D"
-            if lab == "TJNA": # Needed because sometimes the lab name gets cut off 
+            if lab == "TJNA": # Needed because sometimes the lab name gets cut off
                 lab = "TJNAF"
             lab = lab.replace("\xa0","_")
 
@@ -893,14 +982,12 @@ def WDTSscraper(debug = False,
                 files = None,
                 filter_by_topic = False,
                 formats = None,
-                grep = None,
                 interactive = False,
                 no_draw = False,
                 no_lines = False,
                 output_path = "./",
                 strict_filtering = False,
                 types = None,
-                vgrep = None,
                 years = None):
 
     if files is None:
@@ -946,7 +1033,7 @@ def WDTSscraper(debug = False,
     people = []
     for ifile, file in enumerate(files):
         if years[ifile] <= 2014:
-            raise RuntimeError(f"Unfortunately we are unable to get university/institution locations for any year prior to 2015.")
+            raise RuntimeError("Unfortunately we are unable to get university/institution locations for any year prior to 2015.")
         if (types[ifile], years[ifile]) not in process_file_map:
             raise RuntimeError(f"We don't know how to process {types[ifile]} files for the year {years[ifile]}.")
 
@@ -985,8 +1072,6 @@ if __name__ == "__main__":
                         help = "The absolute paths to the files to scrape (default=%(default)s)")
     parser.add_argument("-F", "--formats", nargs = "+", default = ["png"], choices = ["png", "pdf", "ps", "eps", "svg"],
                         help = "List of formats with which to save the resulting map (default=%(default)s)")
-    parser.add_argument("-g", "--grep", nargs = "+",
-                        help = "Specific words or phrases that must exist in each selected line (default=%(default)s)")
     parser.add_argument("-i", "--interactive", action = "store_true",
                         help = "Show the plot during program execution (default=%(default)s)")
     parser.add_argument("-n", "--no-lines", action = "store_true",
@@ -1001,8 +1086,6 @@ if __name__ == "__main__":
                         help = "A list of the types of files being processed (default=%(default)s)")
     parser.add_argument("-T", "--filter-by-topic", action = "store_true",
                         help = "Filter the participants by topic if the topic is available (default=%(default)s)")
-    parser.add_argument("-v", "--vgrep", nargs = "+",
-                        help = "Specific words or phrases that cannot exist in the selected line (default=%(default)s)")
     parser.add_argument("-y", "--years", nargs = "+", type = int,
                         help = "A list of years to help determine how to process each file (default=%(default)s)")
     args = parser.parse_args()
