@@ -12,6 +12,7 @@ Table of Contents
 - [Command line interface](#command-line-interface)
   - [Basic example](#basic-example)
   - [Options](#options)
+  - [Tools](#tools)
 - [Dependencies](#dependencies)
 - [Acknowledgments / Contributors](#acknowledgments--contributors)
 - [Contributing](#contributing)
@@ -23,7 +24,7 @@ Table of Contents
 ```bash
 git clone git@github.com:aperloff/WDTSscraper.git
 python3 python/check_for_dependencies.py
-data/download.sh # <work in progress>
+data/download.sh
 ```
 
 ## Command line interface
@@ -53,6 +54,13 @@ The command line options available are:
   - `-y, --years [years]`: A list of years to help determine how to process each file
 
 The number of files, types, and years must be equal (i.e. you can't specify 10 input files and years, but only 9 program names).
+
+### Tools
+
+There are two tools used for managing the input data collected from the US government:
+
+  - `data/download.sh`: This is used for downloading and extracting the entire collection of needed input files. It gathers US map information from the Census Bureau, post-secondary school information from the Department of Education, and DOE program participation from WDTS.
+  - `data/clean.sh`: This will remove all sub-directories within the `data/` directory. This effectively wipes the slate clean. Make sure not to store any valuable files within these sub-directories.
 
 ## Dependencies
 
