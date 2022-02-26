@@ -51,7 +51,7 @@ def check_pip_dependencies(dependency_dict):
 
     Returns
     -------
-    missing
+    list
         A list of the missing packages
     """
 
@@ -87,7 +87,7 @@ def check_try_dependencies(dependency_list):
 
     Returns
     -------
-    missing
+    list
         A list of the missing modules
     """
 
@@ -113,7 +113,7 @@ def check_system_dependencies(dependency_list):
 
     Returns
     -------
-    missing
+    list
         A list of the missing modules
     """
 
@@ -137,7 +137,7 @@ def check_for_dependencies():
 
     Returns
     -------
-    n_missing
+    list
         The number of missing packages
 
     Suggested from: https://www.activestate.com/resources/quick-reads/how-to-list-installed-python-packages/
