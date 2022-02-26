@@ -18,6 +18,10 @@ process_file_table_with_lines_name_institution_laboratory_area
     Returns a list of program participants by parsing a PDF file
 """
 
+# pylint: disable=C0103
+# pylint: disable=W0613
+# pylint: disable=R0912
+
 import operator
 
 import pdfplumber

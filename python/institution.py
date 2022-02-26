@@ -37,6 +37,7 @@ home_institution_replacements = {
     "State University of New York at Binghamton" : "Binghamton University",
     "University at Buffalo-SUNY" : "University at Buffalo",
     "University at Albany, SUNY" : "SUNY at Albany",
+    "New York City College of Technology/City University of New York" : "CUNY New York City College of Technology",
     "Saint Joseph's College, New York - Suffolk Campus" : "St. Joseph's College-New York",
     "Universidad del Este" : "Universidad Ana G. Mendez-Carolina Campus",
     "Universidad Del Turabo" : "Universidad del Turabo",
@@ -126,7 +127,9 @@ home_institution_replacements = {
     "Hostos Community College-City University of New York" : "CUNY Hostos Community College",
     "City Colleges of Chicago Harold Washington College" : "City Colleges of Chicago-Harold Washington College",
     "City Colleges of Chicago Wilbur Wright College" : "City Colleges of Chicago-Wilbur Wright College",
+    "City Colleges of Chicago Harry S. Truman College" : "City Colleges of Chicago-Harry S Truman College",
     "LIU Post" : "Long Island University",
+    "Long Island University" : "LIU Post",
     "Bethune Cookman University" : "Bethune-Cookman University",
     "University of Houston--Clear Lake" : "University of Houston-Clear Lake",
     "Louisiana State University at Alexandria" : "Louisiana State University-Alexandria",
@@ -151,6 +154,7 @@ home_institution_replacements = {
     "Linfield College" : "Linfield College-McMinnville Campus",
     "Southern Illinois University Carbondale" : "Southern Illinois University-Carbondale",
     "Montana Tech of The University of Montana" : "Montana Tech of the University of Montana",
+    "Montana Tech of the University of Montana" : "Montana Technological University",
     "Syracuse University Main Campus" : "Syracuse University",
     "University of West Florida" : "The University of West Florida",
     "Indiana University-Purdue University Fort Wayne" : "Indiana University-Purdue University-Fort Wayne",
@@ -171,7 +175,7 @@ home_institution_replacements = {
     "Earlham College and Earlham School of Religion" : "Earlham College",
     "Nazareth College of Rochester" : "Nazareth College",
     "State University of New York, The College at Brockport" : "SUNY College at Brockport",
-    "University of Colorado Denver|Anschutz Medical Campus" : "",
+    "University of Colorado Denver|Anschutz Medical Campus" : "University of Colorado Denver/Anschutz Medical Campus",
     "St. Cloud State University" : "Saint Cloud State University",
     "University of Texas at San Antonio" : "The University of Texas at San Antonio",
     "University of Northwestern - St. Paul" : "University of Northwestern-St Paul",
@@ -201,6 +205,45 @@ home_institution_replacements = {
     "Des Moines Area Community College, Boone Campus" : "Des Moines Area Community College",
     "Northampton Community College" : "Northampton County Area Community College",
     "City University of New York Herbert H. Lehman College" : "CUNY Lehman College",
+    "Southern Polytechnic State University" : "Kennesaw State University",
+    "California Maritime Academy" : "The California Maritime Academy",
+    "CSU Maritime Academy" : "California State University Maritime Academy",
+    "Texas A & M University-San Antonio" : "Texas A&M University-San Antonio",
+    "Franklin & Marshall College" : "Franklin and Marshall College",
+    "Northwestern State University" : "Northwestern State University of Louisiana",
+    "University of Wisconsin Colleges" : "University of Wisconsin Colleges Flex",
+}
+
+home_institution_secondary_replacements = {
+    "/City University of New York" : ["CUNY", "/City University of New York", ""],
+    "-City University of New York" : ["CUNY ", "-City University of New York", ""],
+    "City University of New York" : ["City University of New York", "CUNY"],
+    "State University of New York" : ["State University of New York", "SUNY"],
+    "Binghamton University" : ["SUNY at Binghamton"],
+    "St. Joseph's College-New York" : ["Saint Joseph's College-New York"],
+    "Montana Tech of The University of Montana" : ["Montana Technological University"],
+    "Montana Tech of the University of Montana" : ["Montana Technological University"],
+    "Medical Sciences Campus" : [" Medical Sciences Campus", "-Medical Sciences"],
+    "Missoula" : ["The University of Montana"],
+    " De " : [" De ", " de "],
+    "St. John Fisher College" : ["St. ", "Saint "],
+    "St. " : ["St. ", "St "],
+    "Turabo" : ["Universidad Ana G. Mendez"],
+    "Gurabo" : ["Universidad Ana G. Mendez"],
+    "Ana G. Mendez" : [" G. ", " G "],
+    "Paducah Extended Campus" : ["University of Kentucky"],
+    "Cayey" : [" at ", "-"],
+    "Sewanee:" : ["The University of the South"],
+    "Sewanee-" : ["The University of the South"],
+    "Quinnipiac College" : ["Quinnipiac University"],
+    "Edinboro University" : ["Edinboro University of Pennsylvania"],
+    "Penn State Berks" : ["Pennsylvania State University-Penn State Berks"],
+    "A&M" : ["A&M", "A & M", " - ", "-"],
+    "Agricultural and Mechanical" : ["Agricultural and Mechanical", "A & M"],
+    "Agricultural and Technical" : ["Agricultural and Technical", "A & T"],
+    "Main Campus" : [" Main Campus", "-Main Campus"],
+    " and" : [" and", " &"],
+    " - " : [" - ", "-"],
 }
 # pylint: enable=C0301
 
@@ -273,28 +316,28 @@ def append_institutions(schools, year, inst_name):
                 "Woods Hole Oceanographic Institution", "Arts et Metiers ParisTech", "University of Canterbury", "McGill University",
                 "Trinity College Dublin", "Wilfrid Laurier University", "University of Melbourne", "University of Oxford",
                 "Imperial College London", "National Tsing Hua University", "University of Toronto", "Pensacola Christian College",
-                "University of Durham", "University of British Columbia",
-                "Universidad de Antioquia", "University of Padua"
+                "University of Durham", "University of British Columbia", "Universidad de Antioquia", "University of Padua",
+                "University of Bath", "University of Ottawa"
             ],
             "CITY" : [
                 "Falmouth", "Paris", "Christchurch", "Montreal", "Dublin", "Waterloo", "Melbourne", "Oxford", "London", "Hsinchu City",
-                "Toronto", "Pensacola", "Durham", "Vancouver", "Antioquia", "Padova PD"
+                "Toronto", "Pensacola", "Durham", "Vancouver", "Antioquia", "Padova PD", "Bath", "Ottawa"
             ],
             "STABBR" if year == 2015 else "STATE" : [
                 "MA", "France", "New Zealand", "Canada", "Ireland", "Canada", "Australia", "United Kingdom", "United Kingdom",
-                 "Taiwan", "Canada", "FL", "United Kingdom", "Canada", "Colombia", "Italy"
+                 "Taiwan", "Canada", "FL", "United Kingdom", "Canada", "Colombia", "Italy", "England", "Canada"
             ],
             "LAT1516" if year == 2015 else "LAT" : [
                 41.524781001932716, 48.833508810585855, -43.52243692283857, 45.50543135620449,
                 53.34434434753582, 43.474536145835756, -37.798583273349905, 51.75540084373608, 51.49896243904694,
                 24.796345696985465, 43.661591621428244, 30.473591759462174, 54.765146814889256, 49.260822236130316,
-                6.2689002766401485, 45.40693922363649
+                6.2689002766401485, 45.40693922363649, 51.378276373474485, 45.423279573514655
             ],
             "LON1516" if year == 2015 else "LON" : [
                 -70.6711607, 2.358395261383819, 172.5800791301893, -73.57646445446471,
                 -6.254485769308092, -80.5273405693174, 144.96136023807165, -1.2540234772696208, -0.174830586222553,
                 120.99670208429329, -79.39612346136519, -87.23406222329352, -1.5780956131069162, -123.24589724211424,
-                -75.56872258272178, 11.877499842431922
+                -75.56872258272178, 11.877499842431922, -2.326269953976108, -75.68311144407365
             ],
         },
     )
@@ -322,6 +365,8 @@ def get_institution(schools, home_institution, year, debug = False):
         The Institution object containing the relevant data about the participants home institution
     """
 
+    #pylint: disable=R0912
+
     if debug:
         print(f"Getting the home institution details for {home_institution} ... ", end="")
 
@@ -344,70 +389,34 @@ def get_institution(schools, home_institution, year, debug = False):
 
     # if the institution is still not found, try some more replacements
     if institution.size == 0:
-        if "/City University of New York" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["CUNY " + home_institution.replace("/City University of New York", "")])]
-        elif "-City University of New York" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["CUNY " + home_institution.replace("-City University of New York", "")])]
-        elif "City University of New York" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("City University of New York", "CUNY")])]
-        elif "State University of New York" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("State University of New York", "SUNY")])]
-        elif "Binghamton University" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["SUNY at Binghamton"])]
-        elif "St. Joseph's College-New York" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Saint Joseph's College-New York"])]
-        elif "Medical Sciences Campus" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" Medical Sciences Campus", "-Medical Sciences")])]
-        elif "Missoula" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["The University of Montana"])]
-        elif "Montana Tech of the University of Montana" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Montana Technological University"])]
-        elif "Southern Polytechnic State University" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Kennesaw State University"])]
-        elif "Long Island University" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["LIU Post"])]
-        elif " De " in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" De ", " de ")])]
-        elif "St. John Fisher College" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("St. ", "Saint ")])]
-        elif "St. " in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("St. ", "St ")])]
-        elif "Turabo" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Universidad Ana G. Mendez"])]
-        elif "Gurabo" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Universidad Ana G. Mendez"])]
-        elif "Ana G. Mendez" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" G. ", " G ")])]
-        elif "Paducah Extended Campus" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["University of Kentucky"])]
-        elif "California Maritime Academy" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["The " + home_institution])]
-        elif "CSU Maritime Academy" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("CSU", "California State University")])]
-        elif "Cayey" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" at ", "-")])]
-        elif "Texas A & M University-San Antonio" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("A & M", "A&M")])]
-        elif "Sewanee:" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["The University of the South"])]
-        elif "Quinnipiac College" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("College", "University")])]
-        elif "Edinboro University" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution + " of Pennsylvania"])]
-        elif "Penn State Berks" in home_institution:
-            institution = schools.loc[schools[inst_name].isin(["Pennsylvania State University-" + home_institution])]
-        elif "A&M" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("A&M", "A & M").replace(" - ", "-")])]
-        elif "Agricultural and Mechanical" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("Agricultural and Mechanical", "A & M")])]
-        elif "Agricultural and Technical" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace("Agricultural and Technical", "A & T")])]
-        elif "Main Campus" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" Main Campus", "-Main Campus")])]
-        elif " and" in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" and", " &")])]
-        elif " - " in home_institution:
-            institution = schools.loc[schools[inst_name].isin([home_institution.replace(" - ", "-")])]
+        for key, modifications in home_institution_secondary_replacements.items():
+            if key in home_institution:
+                # Cases: 1 = direct search, 2 = single replacement, 3 = prefix + replacement, 4 = double replacement
+                if len(modifications) == 1:
+                    institution = schools.loc[
+                        schools[inst_name].isin(
+                            [modifications[0]]
+                        )
+                    ]
+                elif len(modifications) == 2:
+                    institution = schools.loc[
+                        schools[inst_name].isin(
+                            [home_institution.replace(modifications[0], modifications[1])]
+                        )
+                    ]
+                elif len(modifications) == 3:
+                    institution = schools.loc[
+                        schools[inst_name].isin(
+                            [modifications[0] + home_institution.replace(modifications[1], modifications[2])]
+                        )
+                    ]
+                elif len(modifications) == 4:
+                    institution = schools.loc[
+                        schools[inst_name].isin(
+                            [home_institution.replace(modifications[0], modifications[1]).replace(modifications[2], modifications[3])]
+                        )
+                    ]
+                break
 
     if institution.size == 0:
         if debug:
@@ -424,9 +433,8 @@ def get_institution(schools, home_institution, year, debug = False):
             latitude = institution.iloc[0]['LAT1516'] if year == 2015 else institution.iloc[0]['LAT'],
             longitude = institution.iloc[0]['LON1516'] if year == 2015 else institution.iloc[0]['LON'],
         )
-        return institution
-    else:
-        return None
+
+    return institution
 
 def load_schools(year):
     """Load the correct database of postsecondary school locations
