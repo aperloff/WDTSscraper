@@ -17,23 +17,27 @@ Table of Contents
 <!-- MarkdownTOC autolink="true" -->
 
 - [Installation](#installation)
-  - [Local installation](#local-installation)
-  - [Available Docker images](#available-docker-images)
-- [Command line interface](#command-line-interface)
+  - [Local Installation](#local-installation)
+  - [Available Docker Images](#available-docker-images)
+- [Command Line Interface](#command-line-interface)
   - [Basic example](#basic-example)
   - [Options](#options)
   - [Tools](#tools)
 - [Using Docker](#using-docker)
 - [Examples](#examples)
 - [Dependencies](#dependencies)
-- [Acknowledgments / Contributors](#acknowledgments--contributors)
 - [Contributing](#contributing)
+  - [Unit Testing](#unit-testing)
+    - [Bats for Bash scripts](#bats-for-bash-scripts)
+    - [Pytest for Python modules](#pytest-for-python-modules)
+  - [Linting](#linting)
+- [Acknowledgments / Contributors](#acknowledgments--contributors)
 
 <!-- /MarkdownTOC -->
 
 ## Installation
 
-### Local installation
+### Local Installation
 If you wish to install the dependencies yourself and only wish to checkout the code and download the needed input data, then you may use the following commands.
 
 ```bash
@@ -41,16 +45,37 @@ git clone git@github.com:aperloff/WDTSscraper.git
 data/download.sh
 ```
 
-### Available Docker images
+If the necessary input files were downloaded correctly you should see some output which looks like:
 
-If you'd rather use a clean environment, there is an avilable set of Docker image ([aperloff/wdtsscraper](https://hub.docker.com/r/aperloff/wdtsscraper)) with the following tags:
+```
+Creating the directory data/us_map ... DONE
+Creating the directory data/schools ... DONE
+Creating the directory data/CCI ... DONE
+Creating the directory data/SCGSR ... DONE
+Creating the directory data/SULI ... DONE
+Creating the directory data/VFP ... DONE
+Downloading the US map information ... DONE, VERIFIED
+Extracting the US map shapefiles ... DONE
+Downloading information about US postsecondary schools ... DONE, VERIFIED
+Extracting the school information ... DONE
+Downloading the list of CCI participants ... DONE, VERIFIED
+Downloading the list of SCGSR participants ... DONE, VERIFIED
+Downloading the list of SULI participants ... DONE, VERIFIED
+Downloading the list of VFP participants ... DONE, VERIFIED
+
+SUCCESS::All files downloaded!
+```
+
+### Available Docker Images
+
+If you'd rather use a clean environment, there is an available set of Docker image ([aperloff/wdtsscraper](https://hub.docker.com/r/aperloff/wdtsscraper)) with the following tags:
 
   - `latest`: Contains all of the necessary dependencies and the WDTSscraper code. This image does not contain any of the necessary input data.
   - `latest-data`: Contains everything in the `latest` image, but also contains the input data.
   
-Further information about using these images will be given below.
+Further information about using these images will be given below (see [Using Docker](#using-docker)).
 
-## Command line interface
+## Command Line Interface
 
 ### Basic example
 
@@ -122,17 +147,133 @@ Required dependencies:
       - **For MAC users**: Optionally by programs can be installed using the command `brew install freetype imagemagick ghostscript`
   - [`magiconfig`](https://pypi.org/project/magiconfig/) ([GitHub](https://github.com/kpedro88/magiconfig/)): Used to read Python configuration files.
     - Can be installed using the command `pip3 install --no-cache-dir magiconfig`
-  - [`matplotlib`](https://matplotlib.org/): Used for plotting the scraped data.
+  - [`matplotlib`](https://matplotlib.org/) ([PyPI](https://pypi.org/project/matplotlib/)): Used for plotting the scraped data.
     - Installation instructions can be found [here](https://matplotlib.org/stable/users/installing/index.html).
     - **TLDR**: Install using the command`pip3 install --no-cache-dir matplotlib`
   - `mpl_toolkits`: Should be installed when you install `matplotlib`. In other words, you shouldn't need to do anything extra.
-  - [`GeoPandas`](https://geopandas.org/en/stable/index.html): This library is used to parse geographic data and to visualize it using `matplotlib`.
+  - [`GeoPandas`](https://geopandas.org/en/stable/index.html) ([PyPI](https://pypi.org/project/geopandas/)): This library is used to parse geographic data and to visualize it using `matplotlib`.
     - Installation instructions can be found [here](https://geopandas.org/en/stable/getting_started/install.html#installing-with-pip).
     - **TLDR**: You can install it using the command `pip3 install --no-cache-dir numpy pandas shapely fiona pyproj rtree GeoAlchemy2 geopy mapclassify matplotlib geopandas`
 
 There is a script available to make sure all of the needed dependencies are installed:
 ```bash
 python3 python/check_for_dependencies.py
+```
+
+Optional dependencies:
+  - [`ShellCheck`](https://www.shellcheck.net/) ([GitHub](https://github.com/koalaman/shellcheck)): Used for linting shell scripts.
+  - [`PyLint`](https://pylint.org/) ([GitHub](https://github.com/PyCQA/pylint), [PyPI](https://pypi.org/project/pylint/)): Used for linting Python modules.
+  - [`bats`](https://bats-core.readthedocs.io/en/stable/) ([GitHub](https://github.com/bats-core/bats-core)): Used for unit testing shell scripts.
+  - [`pytest`](https://docs.pytest.org/en/stable/) ([GitHub](https://github.com/pytest-dev/pytest/), [PyPI](https://pypi.org/project/pytest/)): Used for unit testing Python modules.
+
+## Contributing
+
+Pull requests are welcome, but please submit a proposal issue first, as the library is in active development.
+
+Current maintainers:
+
+  - Alexx Perloff
+
+### Unit Testing
+
+Unit testing is performed using [`bats`](https://github.com/bats-core/bats-core) for shell scripts and [`PyTest`](https://docs.pytest.org/en/stable/) for the Python modules. You are of course allowed to install these programs locally. However, shell scripts have been setup to make this procedure as easy as possible.
+
+#### Bats for Bash scripts
+
+The [Bats](https://bats-core.readthedocs.io/en/stable/) tests are currently setup to test the `data/download.sh` and `data/clean.sh` shell scripts. These tests rely on a stable internet connection and the government servers being healthy.
+
+First, the Bats software needs to be setup. This is a process that only needs to happen once. To setup the software run the following command from within the repository's base directory:
+
+```bash
+test/bats_control.sh -s
+```
+
+Once the software is setup, you can run the tests using:
+
+```bash
+./test/bats_control.sh
+```
+
+If everything is working correctly, the output will be:
+
+```bash
+ ✓ Check download
+ ✓ Check clean
+
+2 tests, 0 failures
+```
+
+To remove the Bats software run:
+
+```bash
+./test/bats_control.sh -r
+```
+
+#### Pytest for Python modules
+
+To run the python unit/integration tests, you will need to have PyTest installed. To create a local virtual environment with PyTest installed, use the following commands from within the repository's base directory:
+
+```bash
+./test/pytest_control.sh -s
+```
+
+You only have to run that command when setting up the virtual environment the first time. You can then run the tests by using the command:
+
+```bash
+./test/pytest_control.sh
+```
+
+You should see an output similar to:
+
+```bash
+======================================================== test session starts ========================================================
+platform darwin -- Python 3.9.10, pytest-7.0.1, pluggy-1.0.0
+rootdir: <path to WDTSscraper>
+collected 2 items
+
+test/test.py ..                                                                                                               [100%]
+
+======================================================== 2 passed in 13.34s =========================================================
+```
+
+You can pass addition options to PyTest using the -o flag. For example, you could run the following command to increase the verbosity of PyTest:
+
+```bash
+./test/pytest_control.sh -o '--verbosity=3'
+```
+
+Other helpful pytest options include:
+
+  - `rp`: To see the output of successful tests. This is necessary because by default all of the output from the various tests is captured by PyTest.
+  - `rx`: To see the output of failed tests (default).
+
+To remove the virtual environment use the command:
+
+```bash
+./test/pytest_control.sh -r
+```
+
+which will simply remove the `test/venv` directory.
+
+
+### Linting
+
+Linting is done using [`ShellCheck`](https://www.shellcheck.net/) for the Bash scripts and [`PyLint`](https://pylint.org/) for the Python code. The continuous integration jobs on GitHub will run these linters as part of the PR validation process. You may as well run them in advance in order to shorten the code review cycle. PyLint can be run as part of the Python unit testing process using the command:
+
+```bash
+test/pytest_control.sh -l
+```
+
+Unfortunately, ShellCheck is not installable via PyPI. If you install ShellCheck locally, you would need to run it using the command:
+
+```bash
+find ./ -type f -regex '.*.sh$' -not -path './/test/venv/*' -exec shellcheck -s bash -e SC2162 -e SC2016 -e SC2126 {} +
+```
+
+ShellCheck is also installed inside the Docker image and you can run it as part of method (3) from the [Using Docker](#using-docker) section. In that case you would need to run:
+
+```bash
+docker run --rm -t --mount type=bind,source=\"${PWD}\",target=/WDTSscraper aperloff/wdtsscraper:latest "find ./ -type f -regex '.*.sh$' -not -path './/test/venv/*' -exec shellcheck -s bash -e SC2162 -e SC2016 -e SC2126 {} +"
 ```
 
 ## Acknowledgments / Contributors
@@ -142,11 +283,3 @@ Many thanks to the following users who've contributed ideas, features, and fixes
   - Michael Cook
   - Adam Lyon
   - Kevin Pedro
-
-## Contributing
-
-Pull requests are welcome, but please submit a proposal issue first, as the library is in active development.
-
-Current maintainers:
-
-  - Alexx Perloff

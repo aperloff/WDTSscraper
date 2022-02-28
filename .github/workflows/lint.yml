@@ -18,14 +18,14 @@ jobs:
         sudo apt-get install libssl-dev libcurl4-openssl-dev python3-dev
         python -m pip install --upgrade pip
         python -m pip install pylint pycurl
-        python -m pip install numpy pandas matplotlib magiconfig pdfplumber geopandas
+        python -m pip install -r requirements.txt
     - name: Print some python and pylint information
       run: |
         python --version
         pylint --version
     - name: Analyzing the code for functionality and style
       run: |
-        pylint `find ./ -type f -regex '.*.py$' | xargs`
+        find ./ -type f -regex '.*.py$' -exec pylint {} +
 
   ShellCheck:
 

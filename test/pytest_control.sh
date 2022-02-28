@@ -11,9 +11,23 @@ setup_pytest_venv() {
         echo "Starting the virtual environment now ..."
         # shellcheck disable=SC1091
         source test/venv/bin/activate
-        pip install --no-cache-dir pytest six magiconfig pdfplumber numpy pandas shapely fiona pyproj rtree geoalchemy2 geopy mapclassify matplotlib geopandas
+        pip install --no-cache-dir -r requirements.txt
     else
         error_pytest_control "The directory '${PWD}/test/venv' does not exist. Cannot enter the virtual environment"
+    fi
+}
+
+run_lint() {
+    if [[ -f "test/venv/bin/activate" ]] && [[ "$VIRTUAL_ENV" == "" ]]; then
+        # shellcheck disable=SC1091
+        source test/venv/bin/activate
+    fi
+
+    if [[ "$VIRTUAL_ENV" != "" ]]; then
+        find ./ -type f -regex '.*.py$' -not -path './/test/venv/*' -exec pylint {} +
+    else
+        error_pytest_control "Unable to start the virtual environment containing pytest." \
+                             "Make sure you have run './test/pytest_control.sh -s'"
     fi
 }
 
@@ -60,13 +74,16 @@ EOF
 }
 
 OPTIND=1
+LINT="False"
 OPTIONS=""
 REMOVE="False"
 SETUP="False"
 
 #check arguments
-while getopts "ho:rs" option; do
+while getopts "hlo:rs" option; do
     case "${option}" in
+        l)  LINT="True"
+            ;;
         o)  OPTIONS=${OPTARG}
             ;;
         r)  [[ "${SETUP}" == "True" ]] && error_pytest_control "Cannot specify option -r after specifying option -s"
@@ -92,6 +109,8 @@ if [[ "${SETUP}" == "True" ]]; then
     setup_pytest_venv
 elif [[ "${REMOVE}" == "True" ]]; then
     teardown_pytest_venv
+elif [[ "${LINT}" == "True" ]]; then
+    run_lint
 else
     run_pytest "${OPTIONS}"
 fi

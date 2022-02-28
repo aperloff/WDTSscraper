@@ -23,18 +23,18 @@ LABEL   org.label-schema.build-date=$BUILD_DATE \
 # libspatialindex-dev needed by rtree
 RUN echo "\n\nInstalling system packages using apt-get ..." && \
     apt-get update  && \
-    apt-get install -y vim emacs git imagemagick ghostscript libspatialindex-dev && \
+    apt-get install -y vim emacs git imagemagick ghostscript libspatialindex-dev shellcheck && \
     apt-get clean
-
-# update pip and the python software stack
-RUN echo "\n\nInstalling packages from pip ..." && \
-    pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir pytest six magiconfig pdfplumber numpy pandas shapely fiona pyproj rtree geoalchemy2 geopy mapclassify matplotlib geopandas
 
 # fetch the repository and change the workdir
 RUN echo "\n\nCloning the WDTSscraper repo ..." && \
     git clone https://github.com/aperloff/WDTSscraper.git
 WORKDIR /WDTSscraper
+
+# update pip and the python software stack
+RUN echo "\n\nInstalling packages from pip ..." && \
+    pip install --no-cache-dir --upgrade pip && \
+    pip install --no-cache-dir -r requirements.txt
 
 # if requested, download the input files so that this doesn't need to be done later
 ARG DOWNLOAD_DATA=false

@@ -1,0 +1,17 @@
+###### Requirements without Version Specifiers ######
+pytest
+pylint
+six
+magiconfig
+pdfplumber
+numpy
+pandas
+shapely
+fiona
+pyproj
+rtree
+geoalchemy2
+geopy
+mapclassify
+matplotlib
+geopandas
