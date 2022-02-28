@@ -8,6 +8,8 @@ action() {
     local this_file
     local this_dir
     local root_dir
+
+    # shellcheck disable=SC2296
     this_file="$( [ -n "$ZSH_VERSION" ] && echo "${(%):-%x}" || echo "${BASH_SOURCE[0]}" )"
     this_dir="$( cd "$( dirname "$this_file" )" && pwd )"
     root_dir="$( dirname "$this_dir" )"

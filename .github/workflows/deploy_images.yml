@@ -18,7 +18,7 @@ jobs:
       - name: Build and deploy image 🐳
         uses: docker/build-push-action@v1
         with:
-          path: docker
+          path: .docker/
           repository: aperloff/wdtsscraper
           tags: latest
           push: true
@@ -36,7 +36,7 @@ jobs:
       - name: Build and deploy image 🐳
         uses: docker/build-push-action@v1
         with:
-          path: docker
+          path: .docker/
           repository: aperloff/wdtsscraper
           tags: latest-data
           build-args: DOWNLOAD_DATA=true

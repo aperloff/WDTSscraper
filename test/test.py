@@ -20,7 +20,6 @@ import sys
 sys.path.insert(1, os.path.dirname(os.path.realpath(__file__))+'/../python/')
 # pylint: disable=wrong-import-position
 import pytest # pylint: disable=import-error
-import WDTSscraper
 import check_for_dependencies
 import institution
 import laboratory
@@ -28,6 +27,7 @@ import pdf_parsers
 import person
 import plotter
 import utilities
+import WDTSscraper
 # pylint: enable=wrong-import-position
 # pylint: disable=no-self-use
 
@@ -38,7 +38,7 @@ class Capturing(list):
     Example use:
         with Capturing() as output:
             <Some code that usually prints to sys.stdout>
-        print(output)    
+        print(output)
     """
 
     def __enter__(self):
@@ -64,7 +64,10 @@ class TestUtilities:
 
     def test_extended_enum_list_names(self):
         """Tests the ExtendedEnum class by checking the list_names() member function."""
+
         class Color(utilities.ExtendedEnum):
+            """Dummy class for testing utilities.ExtendedEnum"""
+
             RED = 'RED'
             GREEN = 'GREEN'
             BLUE = 'BLUE'
@@ -73,12 +76,12 @@ class TestUtilities:
 
     def test_extended_enum_list_values(self):
         """Tests the ExtendedEnum class by checking the list_values() member function."""
+
         class Color(utilities.ExtendedEnum):
+            """Dummy class for testing utilities.ExtendedEnum"""
+
             RED = 'RED'
             GREEN = 'GREEN'
             BLUE = 'BLUE'
 
         assert Color.list_values() == ['RED', 'GREEN', 'BLUE']
-
-    #def test_filter_people_by_topic(self):
-        """Tests the """
