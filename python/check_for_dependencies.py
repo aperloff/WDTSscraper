@@ -29,7 +29,7 @@ pip_dependencies = {
     "pdfplumber" : [],
     "magiconfig" : [],
     "matplotlib" : [],
-    "geopandas" : ["numpy", "pandas","shapely", "fiona", "pyproj", "rtree", "geoalchemy2", "geopy", "mapclassify", "matplotlib"],
+    "geopandas" : ["numpy", "pandas", "shapely", "fiona", "pyproj", "rtree", "geoalchemy2", "geopy", "mapclassify", "matplotlib"],
 }
 try_dependencies = ["mpl_toolkits"]
 system_dependencies = ["convert", "gs"] # 'convert' installed by ImageMagick

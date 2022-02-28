@@ -81,6 +81,30 @@ vfp_participants=("https://science.osti.gov/-/media/wdts/pdf/WDTS-SULI-CCI-VFP-S
 				  "https://science.osti.gov/-/media/wdts/vfp/pdf/2015-VFP-Faculty-Terms_Participant-Report.pdf"
 				  "https://science.osti.gov/-/media/wdts/vfp/pdf/2015-VFP-Student-Terms_Participant-Report.pdf")
 
+check_file() {
+	if [[ -f $(basename "${1}") ]]; then
+		echo ", VERIFIED"
+	else
+		echo ", MISSING"
+	fi
+}
+
+check_files() {
+	arr=("$@")
+	all_found=true
+	for file in "${arr[@]}"; do
+		if [[ ! -f $(basename "$file") ]]; then
+			all_found=false
+		fi
+	done
+
+	if ${all_found}; then
+		echo ", VERIFIED"
+	else
+		echo ", MISSING"
+	fi
+}
+
 for dir in "${directories[@]}"; do
 	if [[ -d "data/${dir}" ]]; then
 		echo "Directory data/${dir} already exists!"
@@ -106,7 +130,8 @@ if [[ -n "${download_command}" ]]; then
 	echo -n "Downloading the US map information ... "
 	cd data/us_map/ || return
 	eval "${download_command} ${us_map_location}"
-	echo "DONE"
+	echo -n "DONE"
+	check_file ${us_map_location}
 
 	echo -n "Extracting the US map shapefiles ... "
 	for zip_file in ./*.zip; do
@@ -121,7 +146,8 @@ if [[ -n "${download_command}" ]]; then
 		dcommand="${download_command/-O/}"
 		eval "${dcommand} -o ${postsecondary_school_filenames[$ifile]} ${postsecondary_school_locations[$ifile]}"
 	done
-	echo "DONE"
+	echo -n "DONE"
+	check_files "${postsecondary_school_filenames[@]}"
 
 	echo -n "Extracting the school information ... "
 	for zip_file in ./*.zip; do
@@ -135,7 +161,8 @@ if [[ -n "${download_command}" ]]; then
 	for file in "${cci_participants[@]}"; do
 		eval "${download_command} ${file}"
 	done
-	echo "DONE"
+	echo -n "DONE"
+	check_files "${cci_participants[@]}"
 
 	# Download the list of SCGSR participants
 	echo -n "Downloading the list of SCGSR participants ... "
@@ -143,7 +170,8 @@ if [[ -n "${download_command}" ]]; then
 	for file in "${scgsr_participants[@]}"; do
 		eval "${download_command} ${file}"
 	done
-	echo "DONE"
+	echo -n "DONE"
+	check_files "${scgsr_participants[@]}"
 
 	# Download the list of SULI participants
 	echo -n "Downloading the list of SULI participants ... "
@@ -151,7 +179,8 @@ if [[ -n "${download_command}" ]]; then
 	for file in "${suli_participants[@]}"; do
 		eval "${download_command} ${file}"
 	done
-	echo "DONE"
+	echo -n "DONE"
+	check_files "${suli_participants[@]}"
 
 	# Download the list of VFP participants
 	echo -n "Downloading the list of VFP participants ... "
@@ -159,9 +188,16 @@ if [[ -n "${download_command}" ]]; then
 	for file in "${vfp_participants[@]}"; do
 		eval "${download_command} ${file}"
 	done
-	echo "DONE"
+	echo -n "DONE"
+	check_files "${vfp_participants[@]}"
 
 	cd ../..
 fi
 
-echo -e "\nAll files downloaded!"
+nfiles_expected=$((1 + ${#postsecondary_school_locations[@]} + ${#cci_participants[@]} + ${#scgsr_participants[@]} + ${#suli_participants[@]} + ${#vfp_participants[@]}))
+nfiles_found=$(find data -mindepth 1 -type f -name '*.zip' -o -name '*.pdf' | wc -l)
+if [[ "${nfiles_found}" -eq "${nfiles_expected}" ]]; then
+	echo -e "\nSUCCESS::All files downloaded!"
+else
+	echo -e "\nERROR::Some files seem to be missing!"
+fi

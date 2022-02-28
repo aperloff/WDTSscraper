@@ -10,3 +10,11 @@ do
 		echo "Unable to delete '${dir}'!"
 	fi
 done <  <(find data -mindepth 1 -maxdepth 1 -type d -print0)
+
+count=$(find data -mindepth 1 -maxdepth 1 -type d | wc -l)
+
+if [[ "${count}" -ne "0" ]]; then
+	echo -e "\nERROR::At least one directory wasn't removed."
+else
+	echo -e "\nSUCCESS::The './data/' directory is clean!"
+fi
