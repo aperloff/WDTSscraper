@@ -273,7 +273,7 @@ find ./ -type f -regex '.*.sh$' -not -path './/test/venv/*' -exec shellcheck -s 
 ShellCheck is also installed inside the Docker image and you can run it as part of method (3) from the [Using Docker](#using-docker) section. In that case you would need to run:
 
 ```bash
-docker run --rm -t --mount type=bind,source=\"${PWD}\",target=/WDTSscraper aperloff/wdtsscraper:latest "find ./ -type f -regex '.*.sh$' -not -path './/test/venv/*' -exec shellcheck -s bash -e SC2162 -e SC2016 -e SC2126 {} +"
+docker run --rm -t --mount type=bind,source=${PWD},target=/WDTSscraper aperloff/wdtsscraper:latest /bin/bash -c "find ./ -type f -regex '.*.sh$' -not -path './/test/venv/*' -exec shellcheck -s bash -e SC2162 -e SC2016 -e SC2126 {} +"
 ```
 
 ## Acknowledgments / Contributors
