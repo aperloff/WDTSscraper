@@ -39,7 +39,8 @@ jobs:
           path: .docker/
           repository: aperloff/wdtsscraper
           tags: latest-data
-          build-args: DOWNLOAD_DATA=true
+          build-args: |
+            DOWNLOAD_DATA=true
           push: true
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}

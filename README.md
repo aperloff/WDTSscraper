@@ -17,10 +17,13 @@ Table of Contents
 <!-- MarkdownTOC autolink="true" -->
 
 - [Installation](#installation)
+  - [Local installation](#local-installation)
+  - [Available Docker images](#available-docker-images)
 - [Command line interface](#command-line-interface)
   - [Basic example](#basic-example)
   - [Options](#options)
   - [Tools](#tools)
+- [Using Docker](#using-docker)
 - [Examples](#examples)
 - [Dependencies](#dependencies)
 - [Acknowledgments / Contributors](#acknowledgments--contributors)
@@ -30,11 +33,22 @@ Table of Contents
 
 ## Installation
 
+### Local installation
+If you wish to install the dependencies yourself and only wish to checkout the code and download the needed input data, then you may use the following commands.
+
 ```bash
 git clone git@github.com:aperloff/WDTSscraper.git
-python3 python/check_for_dependencies.py
 data/download.sh
 ```
+
+### Available Docker images
+
+If you'd rather use a clean environment, there is an avilable set of Docker image ([aperloff/wdtsscraper](https://hub.docker.com/r/aperloff/wdtsscraper)) with the following tags:
+
+  - `latest`: Contains all of the necessary dependencies and the WDTSscraper code. This image does not contain any of the necessary input data.
+  - `latest-data`: Contains everything in the `latest` image, but also contains the input data.
+  
+Further information about using these images will be given below.
 
 ## Command line interface
 
@@ -71,6 +85,19 @@ There are two tools used for managing the input data collected from the US gover
   - `data/download.sh`: This is used for downloading and extracting the entire collection of needed input files. It gathers US map information from the Census Bureau, post-secondary school information from the Department of Education, and DOE program participation from WDTS.
   - `data/clean.sh`: This will remove all sub-directories within the `data/` directory. This effectively wipes the slate clean. Make sure not to store any valuable files within these sub-directories.
 
+## Using Docker
+
+There are a few workflows available when using the Docker images:
+
+1. You may choose to use the `latest` image as a clean environment, but download up-to-date input files. In this case, you will need to run the `data/download.sh` script manually.
+2. You may choose to use the `latest-data` image, which already contains the input data. In this case, you will only need to run `python/WDTSscraper.py`
+3. An alternative mode has you checkout the code and download the input data locally, but use one of the Docker images to provide the necessary dependencies. In this case, the code and input data within the image will automatically be replaced by your local version using a bind mount. This method is most useful for people wishing to develop a new feature for the repository, but who want to avoid installing the dependencies on their local machine. The resulting images will be copied back to the host machine. To run in this mode, a helper script has been developed to wrap up all of the Docker complexities. Simply run:
+
+    ```bash
+    .docker/run.sh -C python/configs/config_all_programs_2021.py
+    ```
+    **Note**: To use this running mode, you will need to have permission to bind mount the local directory and the local user will need permission to write to that directory as well. This is typically not a problem unless the repository has been checked out inside a restricted area of the operating system or the permissions on the directory have been changed.
+
 ## Examples
 
 Here are some examples of the types of images which can be created.
@@ -102,6 +129,11 @@ Required dependencies:
   - [`GeoPandas`](https://geopandas.org/en/stable/index.html): This library is used to parse geographic data and to visualize it using `matplotlib`.
     - Installation instructions can be found [here](https://geopandas.org/en/stable/getting_started/install.html#installing-with-pip).
     - **TLDR**: You can install it using the command `pip3 install --no-cache-dir numpy pandas shapely fiona pyproj rtree GeoAlchemy2 geopy mapclassify matplotlib geopandas`
+
+There is a script available to make sure all of the needed dependencies are installed:
+```bash
+python3 python/check_for_dependencies.py
+```
 
 ## Acknowledgments / Contributors
 
