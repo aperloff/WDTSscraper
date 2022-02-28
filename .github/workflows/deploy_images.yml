@@ -15,15 +15,19 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build and deploy image 🐳
-        uses: docker/build-push-action@v1
+      - name: Login to DockerHub 🔐
+        uses: docker/login-action@v1 
         with:
-          path: .docker/
-          repository: aperloff/wdtsscraper
-          tags: latest
-          push: true
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and deploy image 🐳
+        uses: docker/build-push-action@v2
+        with:
+          context: .docker/
+          tags: |
+            aperloff/wdtsscraper:latest
+          push: true
 
   deploy_with_data:
     runs-on: ubuntu-latest
@@ -33,14 +37,18 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Build and deploy image 🐳
-        uses: docker/build-push-action@v1
+      - name: Login to DockerHub 🔐
+        uses: docker/login-action@v1 
         with:
-          path: .docker/
-          repository: aperloff/wdtsscraper
-          tags: latest-data
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and deploy image 🐳
+        uses: docker/build-push-action@v2
+        with:
+          context: .docker/
+          tags: |
+            aperloff/wdtsscraper:latest-data
           build-args: |
             DOWNLOAD_DATA=true
           push: true
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
