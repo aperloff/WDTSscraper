@@ -1,6 +1,6 @@
 # WDTSscraper
 
-[![Lint Code](https://github.com/aperloff/WDTSscraper/actions/workflows/lint.yml/badge.svg)](https://github.com/aperloff/WDTSscraper/actions/workflows/lint.yml)
+[![Lint Code](https://github.com/aperloff/WDTSscraper/actions/workflows/lint.yml/badge.svg)](https://github.com/aperloff/WDTSscraper/actions/workflows/lint.yml) [![Deploy images](https://github.com/aperloff/WDTSscraper/actions/workflows/deploy_images.yml/badge.svg)](https://github.com/aperloff/WDTSscraper/actions/workflows/deploy_images.yml)
 
 Scrape [US Department of Energy (DOE)](https://www.energy.gov/) [Office of Science](https://science.osti.gov/) [Workforce Development for Teachers and Scientists (WDTS)](https://science.osti.gov/wdts) produced PDF files for information about DOE run STEM pipeline programs. The information is taken from [WDTS](https://science.osti.gov/wdts), the [US Census Bureau](https://www.census.gov/), and the [US Department of Education](https://www.ed.gov/). 
 
