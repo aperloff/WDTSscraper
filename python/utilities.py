@@ -58,6 +58,14 @@ def filter_people_by_topic(people, strict = False, topics = None):
     -------
     list
         A filtered list of people
+
+    Raises
+    ------
+    TypeError
+        If topics is not None, then it is expected to be a list of strings, not a string.
     """
+
+    if not isinstance(topics, list):
+        raise TypeError("ERROR::filter_people_by_topic() The 'topics' argument must be a list of strings.")
 
     return [person for person in people if (not strict and not person.topic) or (topics is not None and any(t in person.topic for t in topics))]

@@ -244,8 +244,9 @@ You can pass addition options to PyTest using the -o flag. For example, you coul
 
 Other helpful pytest options include:
 
-  - `rp`: To see the output of successful tests. This is necessary because by default all of the output from the various tests is captured by PyTest.
-  - `rx`: To see the output of failed tests (default).
+  - `-rP`: To see the output of successful tests. This is necessary because by default all of the output from the various tests is captured by PyTest.
+  - `-rx`: To see the output of failed tests (default).
+  - `-k <testname>`: Will limit the tests run to just the test(s) specified. The `<testname>` can be a class of tests or the name of a specific unit test function.
 
 To remove the virtual environment use the command:
 
