@@ -145,6 +145,8 @@ Required dependencies:
       - [`ImageMagick`](https://www.imagemagick.org/): [Installation instructions](http://docs.wand-py.org/en/latest/guide/install.html#install-imagemagick-debian)
       - [`ghostscript`](https://www.ghostscript.com/)): [Installation instructions](https://www.ghostscript.com/doc/9.21/Install.htm)
       - **For MAC users**: Optionally by programs can be installed using the command `brew install freetype imagemagick ghostscript`
+  - [`jsons`](https://pypi.org/project/jsons/) ([GitHub](https://github.com/ramonhagenaars/jsons)): Used to serialize and deserialize the class objects.
+    - Can be installed using the command `pip3 install --no-cache-dir jsons`
   - [`magiconfig`](https://pypi.org/project/magiconfig/) ([GitHub](https://github.com/kpedro88/magiconfig/)): Used to read Python configuration files.
     - Can be installed using the command `pip3 install --no-cache-dir magiconfig`
   - [`matplotlib`](https://matplotlib.org/) ([PyPI](https://pypi.org/project/matplotlib/)): Used for plotting the scraped data.

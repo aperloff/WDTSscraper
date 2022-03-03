@@ -27,6 +27,7 @@ import pkg_resources
 
 pip_dependencies = {
     "pdfplumber" : [],
+    "jsons"      : [],
     "magiconfig" : [],
     "matplotlib" : [],
     "geopandas" : ["numpy", "pandas", "shapely", "fiona", "pyproj", "rtree", "geoalchemy2", "geopy", "mapclassify", "matplotlib"],
