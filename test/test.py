@@ -14,6 +14,7 @@
 """
 
 from __future__ import absolute_import
+from datetime import date
 import glob
 import os
 import sys
@@ -301,6 +302,13 @@ class TestUtilities:
         assert any(person.first_name == "alice" for person in group3) and len(group3) == 1
         assert not any(person.first_name == "mary" for person in group3) and len(group3) == 1
 
+    def test_get_formatted_filename(self):
+        """Tests the get_formatted_filename function from within the utilities module."""
+
+        expected = f"{date.today().strftime('%Y_%m_%d')}_test_file_name_v0.txt"
+        filename = utilities.get_formatted_filename("", "test_file_name", "txt")
+        assert filename == expected
+
 class TestWDTSscraper:
     """This section covers the integration tests.
     These tests will make sure that all of the code works in harmony.
@@ -311,7 +319,7 @@ class TestWDTSscraper:
         In the end we will be making sure that an image file is created.
         """
 
-        WDTSscraper.wdts_scraper(['-C','python/configs/config_all_programs_2021.py'])
-        files = glob.glob('*_map_v*.*')
+        WDTSscraper.wdts_scraper(['-C','python/configs/config_all_programs_2021.py', '-s'])
+        files = glob.glob('*_map_v*.*') + glob.glob('*_people_v*.*')
         print("TestWDTSscraper::test_wdts_scraper() Found the files: " + str(files))
         assert len(files) > 0

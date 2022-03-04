@@ -23,6 +23,7 @@ from pdf_parsers import process_file_table_no_lines_program_lastfirstname_instit
 from pdf_parsers import process_file_table_no_lines_term_lastname_firstname_institution_laboratory
 from pdf_parsers import process_file_table_with_lines_name_institution_laboratory_term
 from pdf_parsers import process_file_table_with_lines_name_institution_laboratory_area
+from person import get_people, save_people
 from plotter import plot_map
 from utilities import filter_people_by_topic
 
@@ -62,6 +63,8 @@ def wdts_scraper(argv = None):
                         help = "Do not create or save the resulting map (default=%(default)s)")
     parser.add_argument("-O", "--output-path", default = os.getcwd(),
                         help = "Directory in which to save the resulting maps (default=%(default)s)")
+    parser.add_argument("-s", "--save-list-of-people", action = "store_true",
+                        help = "Save a serialized list of people to a text file (default=%(default)s)")
     parser.add_argument("-S", "--strict-filtering", action = "store_true",
                         help = "More tightly filter out participants by removing those whose topic is unknown (default=%(default)s)")
     parser.add_argument("-t", "--types", choices = ["VFP", "SULI", "CCI", "SCGSR"], nargs = "+",
@@ -117,20 +120,7 @@ def wdts_scraper(argv = None):
       ('SCGSR', 2014): process_file_table_with_lines_name_institution_laboratory_area,
     }
 
-    people = []
-    for ifile, file in enumerate(args.files):
-        if args.years[ifile] <= 2014:
-            raise RuntimeError("Unfortunately we are unable to get university/institution locations for any year prior to 2015.")
-        if (args.types[ifile], args.years[ifile]) not in process_file_map:
-            raise RuntimeError(f"We don't know how to process {args.types[ifile]} files for the year {args.years[ifile]}.")
-
-        print(f"Processing the file {file} (year = {args.years[ifile]}, program = {args.types[ifile]}) ... ")
-        people += process_file_map[(args.types[ifile], args.years[ifile])](
-            file,
-            args.years[ifile],
-            debug = args.debug,
-            program_filter = [args.types[ifile]]
-        )
+    people = get_people(args.files, args.types, args.years, process_file_map, args.debug)
 
     if args.filter_by_topic:
         people = filter_people_by_topic(people, strict = args.strict_filtering, topics = ["HEP", "High Energy Physics"])
@@ -145,6 +135,9 @@ def wdts_scraper(argv = None):
             show = args.interactive,
             states = None,
         )
+
+    if args.save_list_of_people:
+        save_people(args, people)
 
 if __name__ == "__main__":
     wdts_scraper()

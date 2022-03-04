@@ -13,9 +13,6 @@ plot_map
     Does all of the formatting and plotting of the map, markers, and lines
 """
 
-from datetime import date
-import os
-
 import geopandas as gpd
 import matplotlib.pyplot as plt
 import matplotlib.lines as mlines
@@ -24,6 +21,7 @@ import pandas as pd
 
 from laboratory import Laboratories
 from person import Jobs
+from utilities import get_formatted_filename
 
 def hanging_line(point1, point2):
     """Load the correct database of postsecondary school locations
@@ -356,11 +354,7 @@ def save_figure(formats, output_path):
     """
 
     for fmt in formats:
-        output_filename = f"{output_path}/{date.today().strftime('%Y_%m_%d')}_map"
-        i = 0
-        while os.path.exists(f"{output_filename}_v{i}.{fmt}"):
-            i += 1
-        output_filename = f"{output_filename}_v{i}.{fmt}"
+        output_filename = get_formatted_filename(f"{output_path}", "map", fmt)
         plt.savefig(output_filename, bbox_inches='tight')
 
 def set_axes_bounds(continental_ax, alaska_ax, hawaii_ax, puerto_rico_ax):
